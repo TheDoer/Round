@@ -1,0 +1,41 @@
+ <!DOCTYPE HTML>
+<html>
+<head>
+	<link rel="icon" type="/static/img/logo.png" href="">
+    <title>Round & Round | IT GOES</title>
+    <link rel="stylesheet" type="text/css" href="/static/uiux/semantic-ui/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/uiux/semantic-ui/UI-Icon-master/icon.min.css">
+  </head>
+
+<body>
+ 	<div class="ui inverted attached menu stackable grid">
+ 		<a class="item" href={{ url_for('index') }}>
+			<img class="ui mini circular image" src="/static/assets/images/logo.png"> &nbsp
+	  	</a>
+	  	<a class="item" href={{ url_for('index') }}>
+			<b>RoundShopper</b>
+	  	</a>
+		<a class="item">Delivery Information</a>
+	    <a class="item">Contact: +263 774 150 929</a>
+
+	    <div class="right menu">
+			{% block logout %}
+		    {% endblock %}
+        </div>
+	</div>
+  	<div class="ui teal inverted attached menu stackable grid">
+      <div class="ui row">        
+          {% block notifications %}
+          {% endblock %} 
+      </div>
+    </div>
+    {% block menu %}
+    {% endblock %}
+
+  	{% block body %}
+  	{% endblock %}
+
+  <script type="text/javascript" src="/static/uiux/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="/static/uiux/semantic-ui/semantic.min.js"></script>
+  <script type="text/javascript" src="/static/js/app.js"></script>
+  </body>

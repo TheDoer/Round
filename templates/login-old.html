@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block notifications %}
+	<a class="ui large blue button right floated" href="{{ url_for('register') }}">Create an account</a>	
+{% endblock %}
+
+{% block body %}
+
+<div class="ui stackable grid">
+	<div class="four wide column"></div>
+	<div class="ui eight wide column">
+		<div class="ui segment">
+			<div class="ui header"><h2>Login</h2></div>
+			<form class="ui massive form" action="{{ url_for('login_aunth') }}" method="POST">				
+				{% with messages = get_flashed_messages(True) %}
+				  	{% for category, message in messages %}
+				  		<div class="ui fluid {{ category }} message">
+				  			<i class="ui close icon"></i>
+				  			<div class="ui header">{{ category }}</div>
+				  			{{ message }}
+				  		</div>
+				  	{% endfor %}
+				  {% endwith %}
+				<div class="ui error message">
+			    	<div class="header">Invalid Login</div>
+			    	<p>The credentials you submitted are incorrect.</p>
+			  	</div>
+			  <div class="ui massive required input field">
+			    <label>Email</label>
+			    <input type="email" name="email" placeholder="Email" required>
+			  </div>
+			  <div class="ui massive required input field">
+			    <label>Password</label>
+			    <input type="password" name="password" placeholder="Password" required>
+			  </div>
+			  <button class="ui massive green button" type="submit">Login</button>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}

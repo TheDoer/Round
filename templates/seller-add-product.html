@@ -1,0 +1,113 @@
+{% extends 'seller-layout.html' %}
+
+{% block body %}
+  <div class="ui sixteen wide column">
+    <p>&nbsp</p>
+    <p>&nbsp</p>
+  </div>
+
+    <div class="ui padded stackable grid">
+      <div class="four wide column"></div>
+
+      <div class="eight wide column">
+        <div class="ui segment">
+          <h1 class="ui dividing header">
+          	<i class="ui orange cart icon"></i>
+          	Add a new stock item
+          </h1>
+          <p>&nbsp</p>
+          {% with messages = get_flashed_messages(True) %}
+          	{% for category, message in messages %}
+          		<div class="ui fluid {{ category }} message">
+          			<i class="ui close icon"></i>
+          			<div class="ui header">{{ category }}</div>
+          			{{ message }}
+          		</div>
+          	{% endfor %}
+          {% endwith %}
+          
+          <form class="ui large message form" action="{{ url_for('seller_add_product') }}" method="POST" enctype="multipart/form-data">
+
+            <label>Product description <i>e.g Probrands White Rice</i></label>
+            <p></p>
+            <div class="ui three fields">
+              <div class="ui large required input field">
+                  <label>Brand name</label>
+                  <input type="text" name="brand" placeholder="Brand name" list="brands" required>
+                  <datalist id="brands">
+                  	{% for brand in brands %}
+                  		<option value="{{ brand.name }}">
+                  	{% endfor %}
+                  </datalist>
+              </div>
+
+              <div class="ui large required input field">
+                  <label>Description</label>
+                  <input type="text" name="description" list="descriptions" placeholder="e.g Brown" required>
+                  <datalist id="descriptions">
+                  	{% for description in descriptions %}
+                  		<option value="{{ description.description }}">
+                  	{% endfor %}
+                  </datalist>
+              </div>
+
+              <div class="ui large required input field">
+                <label>Product</label>
+                <input type="text" name="product" list="products" placeholder="e.g Rice" required>
+                <datalist id="products">
+                  	{% for product in products %}
+                  		<option value="{{ product.name }}">
+                  	{% endfor %}
+                  </datalist>
+                </div>
+            </div>
+
+            <p>&nbsp</p>
+
+              <label>Pricing & Target <i>e.g 2KG x $1.43 x 500 units </i></label>
+              <p></p>
+              <div class="ui four fields">
+                <div class="ui large required input field">
+                  <label>Number</label>
+                  <input type="number" name="quantity" required>
+                </div>
+                <div class="ui large required input field">
+                  <label>Unit</label>
+                  <select name="unit" required>
+                    <option value="">Units</option>
+                    {% for unit in units %}
+                      <option value="{{ unit.short_name }}">{{ unit.short_name }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+
+                <div class="ui large required input field">
+                  <label>Price for 1 unit</label>
+                  <input type="text" name="price" list="prices" placeholder="Price" required>
+                  <datalist id="prices">
+                  	{% for price in prices %}
+                  		<option value="{{ price.price }}">
+                  	{% endfor %}
+                  </datalist>
+                </div>
+
+                <div class="ui large required input field">
+                  <label>Target</label>
+                  <input type="number" name="target" placeholder="Target" required>
+                </div>
+              </div>
+              
+              <p>&nbsp</p>
+              
+              <div class="ui large required input field">
+                  <label>Browse for image [Max=1MB]</label>
+                  <input type="file" name="image" required>
+                </div>
+
+            <p>&nbsp</p>
+            <button class="ui large blue button" type="submit"><i class="ui add circle icon"></i>Add product</button>
+          </form>
+        </div>
+      </div>
+    </div>
+{% endblock %}

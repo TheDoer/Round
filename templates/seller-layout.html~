@@ -1,0 +1,115 @@
+{% extends 'layout.html' %}
+
+{% block notifications %}
+
+					<h3 class="ui right floated header">
+						<div class="ui right aligned blue inverted segment">
+							<div class="ui fluid large dropdown image label" tabindex="0">
+					          <i class="setting icon"></i>
+					          {{ current_user.email }}
+								<i class="ui dropdown icon"></i>
+								<div class="menu">
+								    <!--<a class="item"><i class="orange user icon"></i>Profile</a>-->
+								    <a class="item" href="{{ url_for('logout') }}"><i class="orange sign out icon"></i>Logout</a>
+								</div>
+							</div>
+						</div>
+
+					<h3 class="ui right floated header">
+						<div class="ui right aligned blue inverted segment">
+					        <div class="ui fluid large dropdown image label" tabindex="0">
+					          <i class="cart icon"></i>
+					          Orders &nbsp &nbsp
+					          <div class="floating circular ui red label">{{ (Order.select(Order).join(Stock)).where(Stock.supplier==current_user and Order.ready==False).group_by(Order.stock).count() }}</div>
+
+					          <div class="menu" tabindex="-1" style="height: 400px; overflow-y: scroll;">
+					            <div class="ui divided selection list">
+					              {% for order in (Order.select(Order).join(Stock)).where(Stock.supplier==current_user and Order.ready==False).group_by(Order.stock) %}
+					              <a class="item">
+					                <div class="content">
+					                  <div class="header">
+					                    <i class="right cart icon"></i>
+					                    {{ Order.select(fn.sum(Order.quantity)).where(Order.stock==order.stock.id).scalar() }} x 
+					                    {{ order.stock.quantity }} {{ order.stock.unit.short_name }}
+					                    {{ order.stock.brand.name }}
+					                    {{ order.stock.first_description.description }}
+					                    {{ order.stock.product.name }}
+					                  </div>
+					                  <div class="">
+					                    Order No: {{ order.id }} <br>
+					                    Price: ${{ order.price }}<br><br>
+					                    <div class="ui info" >
+					                      <i class="info circle icon"></i>
+					                      Still waiting for {{ order.stock.minimum_quantity - Order.select(fn.sum(Order.quantity)).where(Order.stock==order.stock.id).scalar() }} units to be ordered
+					                    </div>
+					                  </div>
+					                </div>
+					              </a>
+					              {% endfor %}
+					            </div>
+
+					          </div>
+					        </div>
+					    </div>
+
+					<h3 class="ui right floated header">
+						<div class="ui right aligned blue inverted segment">
+	        				<div class="ui fluid large dropdown image label">
+					          	<i class="alarm icon"></i>
+					          	Notifications &nbsp
+					          	<div class="floating circular ui red label">{{ (Order.select(Order).join(Stock)).where(Stock.supplier==current_user and Order.ready==True).group_by(Order.stock).count() }}</div>
+
+					        	<div class="menu" tabindex="-1" style="height: 400px; overflow-y: scroll;">
+
+						            <div class="ui divided selection list">
+						              {% for order in (Order.select(Order, fn.sum(Order.price).alias('total_price')).join(Stock)).where(Stock.supplier==current_user and Order.ready==True).group_by(Order.stock) %}
+						              <a class="item">
+						                <div class="content">
+						                  <div class="header">
+						                    <i class="right cart icon"></i>
+						                    {{ (Order.select(fn.sum(Order.quantity)).where(Order.stock==order.stock.id).scalar()) }} x 
+						                    {{ order.stock.quantity }} {{ order.stock.unit.short_name }}
+						                    {{ order.stock.brand.name }}
+						                    {{ order.stock.first_description.description }}
+						                    {{ order.stock.product.name }}
+						                    </div>
+						                  <div class="">
+						                    Stock No: {{ order.stock.id }} <br>
+						                    Price: ${{ order.total_price }}<br><br>
+						                    <div class="ui info" >
+						                      <i class="shipping icon"></i>
+						                      Congratulations your target has been met. 
+						                    </div>
+						                  </div>
+						                </div>
+						              </a>
+						              {% endfor %}
+						            </div>
+					          	</div>
+				        	</div>
+				        </div>
+{% endblock %}
+
+{% block menu %}
+    <div class="ui sixteen wide column">
+      <div class="ui segment">
+          <div class="ui stackable pointing secondary menu">
+          <a class="orange item" href="{{url_for('supplier') }}">
+            Dashboard
+          </a>
+          <a class="orange item" href="{{url_for('supplier_feed') }}">
+            View Feed
+          </a>
+          <a class="orange item" href="{{url_for('seller_add_product') }}">
+            Add Stock Item
+          </a>
+          <a class="orange item" href="{{url_for('seller_make_suggestion') }}">
+            Make suggestion
+          </a>
+          <a class="orange item" href="{{url_for('seller_add_product') }}">
+            How it works
+          </a>
+        </div>
+      </div>
+    </div>
+{% endblock %}

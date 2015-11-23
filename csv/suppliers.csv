@@ -1,0 +1,4 @@
+id,name,phone,email,password,buyer_type,address,longitude,latitude,rating,date_joined
+1,Nat Foods,775527640,orders@gmb.com,tatenda,free,"77 Workington Road, Harare, Zimbabwe",,,0.0,2015-08-06 13:54:17.555200
+2,Cairns,775527640,orders@cairns.com,tatenda,free,"77 Workington Road, Harare, Zimbabwe",,,0.0,2015-08-29 08:14:38.913729
+3,Progroup,775527640,orders@progroup.com,tatenda,free,"77 Workington Road, Harare, Zimbabwe",,,0.0,2015-08-29 08:17:39.487848

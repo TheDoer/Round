@@ -1,0 +1,24 @@
+> add profile pic attribute to Buyer and Supplier models
+> change buyer_type to seller_type
+> change Courier to Shipper
+> tech debt: indent all html code proper
+> use pep on all py code
+> proper inheritance issues
+> cryptic hashing of passwords
+> server-side validation
+> proper validation
+> display flash messages on relevant pages
+> cryptic hashing
+> field validation
+> strict page access control
+> what if a seller wants to remove a stock item
+> should we automatically restock or should the seller do it
+> improve implementation of ordering
+> keep refreshing the figures
+> add stock number to stocks table
+
+validation
+> target = 0
+> login
+> placing orders
+> amounts

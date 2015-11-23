@@ -1,0 +1,2 @@
+id,name,phone,email,password,buyer_type,address,longitude,latitude,role,is_admin,date_joined
+1,tawanda,775527640,tawandazimba@gmail.com,tatenda,free,"77 Quorn Avenue, Mount Pleasant, Harare, Zimbabwe",,,clerk,0,2015-08-06 13:54:32.074200

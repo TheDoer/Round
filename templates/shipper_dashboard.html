@@ -1,0 +1,142 @@
+{% extends 'layout.html' %}
+ 
+{% block notifications %}
+      <h3 class="ui right floated header">
+        <a class="ui large image label">
+          <img src="/static/img/profile/koala.jpg">
+          {{ current_user.name }}
+          <div class="label detail">Logout</div>
+        </a>
+    
+      <h3 class="ui right floated header">
+        <div class="ui fluid large dropdown image label" tabindex="0">
+          <i class="cart icon"></i>
+          Orders &nbsp &nbsp
+          <div class="floating circular ui red label">{{ Order.select().count() }}</div>
+
+          <div class="menu" tabindex="-1" style="height: 400px; overflow-y: scroll;">
+            <div class="header">
+              Search Orders
+            </div>
+            <div class="ui fluid left icon input">
+              <i class="search icon"></i>
+              <input type="text" name="search" placeholder="Search...">
+            </div>
+
+            <div class="ui divided selection list">
+              {% for order in Order.select() %}
+              <a class="item">
+                <div class="content">
+                  <div class="header">
+                    <i class="right cart icon"></i>
+                    {{ Order.select(fn.sum(Order.quantity)).where(Order.stock==order.stock.id).scalar() }} x 
+                    {{ order.stock.quantity }} {{ order.stock.unit.short_name }}
+                    {{ order.stock.brand.name }}
+                    {{ order.stock.first_description.description }}
+                    {{ order.stock.product.name }}
+                  </div>
+                  <div class="">
+                    Order No: {{ order.id }} <br>
+                    Price: ${{ order.price }}<br><br>
+                    <div class="ui info" >
+                      <i class="info circle icon"></i>
+                      Still waiting for {{ order.stock.minimum_quantity - Order.select(fn.sum(Order.quantity)).where(Order.stock==order.stock.id).scalar() }} units to be ordered
+                    </div>
+                  </div>
+                </div>
+              </a>
+              {% endfor %}
+            </div>
+
+          </div>
+        </div>
+
+      <h3 class="ui right floated header">
+        <div class="ui fluid large dropdown image label">
+          <i class="alarm icon"></i>
+          Notifications &nbsp
+          <div class="floating circular ui red label">{{ (Order.select(Order).join(Stock)).where(Stock.supplier==current_user and Order.ready==True).group_by(Order.stock).count() }}</div>
+
+        <div class="menu" tabindex="-1" style="height: 400px; overflow-y: scroll;">
+            <div class="header">
+              Search Notifications
+            </div>
+            <div class="ui fluid left icon input">
+              <i class="search icon"></i>
+              <input type="text" name="search" placeholder="Search...">
+            </div>
+
+            <div class="ui divided selection list">
+              {% for order in Order.select() %}
+              <a class="item">
+                <div class="content">
+                  <div class="header">
+                    <i class="right cart icon"></i>
+                    {{ (Order.select(fn.sum(Order.quantity)).where(Order.stock==order.stock.id).scalar()) }} x 
+                    {{ order.stock.quantity }} {{ order.stock.unit.short_name }}
+                    {{ order.stock.brand.name }}
+                    {{ order.stock.first_description.description }}
+                    {{ order.stock.product.name }}
+                    </div>
+                  <div class="">
+                    Order No: {{ order.id }} <br>
+                    Price: ${{ order.price }}<br><br>
+                    <div class="ui info" >
+                      <i class="shipping icon"></i>
+                      Congratulations your target has been met. 
+                    </div>
+                  </div>
+                </div>
+              </a>
+              {% endfor %}
+            </div>
+
+          </div>
+        </div>
+{% endblock %}
+
+{% block body %}
+
+    <div class="ui padded grid">
+      <div class="eight wide column">
+        {% for order in Order.select().where(Order.ready==True) %}
+        <div class="ui segment">
+           <div class="ui divided items">
+              <div class="item">
+                <div class="ui small image">
+                  <img src="/static/img/shop-placeholder.png">
+                  <div class="ui red top left attached label"><strong>${{ order.stock.price }}</strong></div>
+                </div>
+                
+                <div class="content">
+                  <div class="header">Shipping Request: Order No {{ order.id }}</div>
+                  <div class="meta">
+                    
+                  </div>
+                  <hr>
+                  <div class="description">
+                    <div class="ui items selection list">
+                      <div class="item">
+                        <strong>Quantity:</strong>
+                        <div class="ui blue horizontal label">{{ order.quantity }} x {{ order.quantity }} {{ order.stock.unit.short_name }} {{ order.stock.brand.name }} {{ order.stock.first_description.description }} {{ order.stock.product.name }}</div>                
+                      </div>
+                        <div class="item">
+                            <strong>Source:</strong>
+                              <div class="ui green horizontal label">{{ order.stock.supplier.address }}
+                              </div>                                         
+                          </div>
+                          <div class="item">
+                            <strong>Destination:</strong>
+                            <div class="ui red horizontal label">{{ order.buyer.address }}</div>                 
+                          </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="eight wide column"></div>
+    </div>
+{% endblock %}

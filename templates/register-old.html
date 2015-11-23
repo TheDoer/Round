@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+
+{% block notifications %}
+	<a class="ui large blue button right floated" href="{{ url_for('login') }}">Login</a>	
+{% endblock %}
+
+{% block body %}
+
+<div class="ui stackable grid">
+	<div class="four wide column"></div>
+	<div class="ui eight wide column">
+		<div class="ui segment">
+			<div class="ui header"><h2>Create an account</h2></div>
+			<form class="ui large form" action="{{ url_for('register') }}" method="POST">				
+				<div class="ui message">
+					<p>Please fill in all fields</p>
+				</div>
+				<div class="ui error message">
+			    	<div class="header">Invalid Login</div>
+			    	<p>The credentials you submitted are incorrect.</p>
+			  	</div>
+			  	<div class="ui large required input field">
+			    	<label>Email</label>
+			    	<input type="email" name="email" placeholder="Email" required>
+			  	</div>
+			  	<div class="ui large required input field">
+			    	<label>Password</label>
+			    	<input type="password" name="password" placeholder="Password" required>
+			  	</div>
+
+			  	<div class="ui large required input field">
+			    	<label>Address</label>
+			    	<textarea name="address" placeholder="Address" required></textarea>
+			  	</div>
+
+			  	<div class="ui large required input field">
+                    <select class="" name="account_type" required>
+                      <option value="">Account type</option>
+                        <option value="buyer">Buyer</option>
+                        <option value="supplier">Supplier</option>
+                    </select>
+                </div>
+
+			  	<label>Phone</label>
+			  	<div class="ui two fields">
+					<div class="ui grid">
+						<div class="three wide column">
+					  		<div class="ui large input field">
+					  			<input type="number" name="code" value="263" required readonly>
+					  		</div>
+					  	</div>
+					  	<div class="ui thirteen wide column">
+							<div class="ui large required input field">
+							    <input type="number" name="phone" placeholder="Example: 712345678" required>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<p>&nbsp</p>
+			  <button class="ui large green button" type="submit">Create Account</button>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}

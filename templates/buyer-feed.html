@@ -3,12 +3,12 @@
 {% block body %}
 
     <div class="ui padded stackable grid">
-      <div class="eight wide column">
+      <div class="ten wide column">
           {% for stock in stocks %}
         <div class="ui segment">
            <div class="ui divided items">
-              <div class="item">
-                <div class="ui small image">
+              <div class="ui item">
+                <div class="fluid image">
                   <img src="/static/img/{{ stock.stock.brand.image }}">
                   <div class="ui red top left attached label"><strong>${{ stock.stock.price }}</strong></div>
                 </div>
@@ -56,6 +56,20 @@
                     </div>
                   </div>
                   <div align="right" class="extra">
+                  	<form class="form" action="" method="POST">
+						<div class="ui action input">
+	                      	<input type="hidden" name="stock_id" value="{{ stock.stock.id }}">
+						  	{% from 'macros.html' import render_field %}
+
+						    {{ forms.OrderForm().hidden_tag() }}
+						    {% for field in forms.OrderForm() %}
+						    	{{ render_field(field) }}
+						    {% endfor %}
+						    
+						  	<button class="ui teal right labeled icon button">Order<i class="add cart icon"></i></button>
+						</div>
+					</form>
+
                     <div class="ui small action input">
                       <input type="hidden" name="stock_id" value="{{ stock.stock.id }}">
                       <input id="order-{{ stock.stock.id }}" type="number" name="quantity" value="0">

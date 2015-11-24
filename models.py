@@ -12,7 +12,7 @@ class BaseModel(Model):
 
 class User(BaseModel, UserMixin):
 	username = CharField()
-	phone = IntegerField()
+	phone = IntegerField(unique=True)
 	email = CharField(unique=True, max_length=140)
 	password = CharField(max_length=50)
 	profile = TextField() 

@@ -22,6 +22,7 @@
   <link rel="stylesheet" type="text/css" href="/static/components/form.css">
   <link rel="stylesheet" type="text/css" href="/static/components/input.css">
   <link rel="stylesheet" type="text/css" href="/static/components/button.css">
+  <link rel="stylesheet" type="text/css" href="/static/components/label.css">
   <link rel="stylesheet" type="text/css" href="/static/components/list.css">
   <link rel="stylesheet" type="text/css" href="/static/components/message.css">  
   <link rel="stylesheet" type="text/css" href="/static/uiux/semantic-ui/UI-Icon-master/icon.min.css">
@@ -119,19 +120,16 @@
               ]
             },
             password: {
-              identifier  : 'password',
+              identifier: 'password',
               rules: [
                 {
-                  type   : 'empty',
-                  prompt : 'Please enter your password'
-                },
-                {
-                  type   : 'length[2]',
-                  prompt : 'Your password must be at least 6 characters'
+                  type: 'empty',
+                  prompt: 'Please enter a password'
                 }
               ]
             }
-          }
+          },
+          inline: true
         })
       ;
     })
@@ -147,34 +145,16 @@
         Welcome back, Login to your RoundShopper Account
       </div>
     </h2>
-    <form class="ui large form" method="POST" action="{{ url_for('login_aunth') }}">
-      <div class="ui stacked segment">
-	 {% with messages = get_flashed_messages(True) %}
-				  	{% for category, message in messages %}
-				  		<div class="ui fluid {{ category }} message">
-				  			<i class="ui close icon"></i>
-				  			<div class="ui header">{{ category }}</div>
-				  			{{ message }}
-				  		</div>
-				  	{% endfor %}
-				  {% endwith %}
-        <div class="field">
-          <div class="ui left icon input">
-            <i class="ui user icon"></i>
-            <input type="text" name="email" placeholder="E-mail address">
-          </div>
-        </div>
-        <div class="field">
-          <div class="ui left icon input">
-            <i class="lock icon"></i>
-            <input type="password" name="password" placeholder="Password">
-          </div>
-        </div>
-        <button class="ui fluid large teal submit button">Login into RoundShopper</button>
-      </div>
+    
+    <form method="POST" action="" class="ui large form segment">
+      {% from 'macros.html' import render_field %}
 
-      <div class="ui error message"></div>
-
+      {{ form.hidden_tag() }}
+      {% for field in form %}
+        {{ render_field(field) }}
+      {% endfor %}
+      
+      <button class="ui fluid large teal submit button" type="submit" id="submit">Login!</button>
     </form>
 
     <div class="ui message">

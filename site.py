@@ -1,11 +1,9 @@
 import json
-import os
-from werkzeug import secure_filename
 
 from flask import Flask, render_template, redirect, url_for, request, flash
-from flask_login import LoginManager, login_user, logout_user, current_user, login_required
+#from flask-login import LoginManager, login_user, logout_user, current_user, login_required
 
-from models import *
+from twilio.rest import TwilioRestClient
 
 from models import User, Stock, Order, Product, Descriptor, Brand
 
@@ -194,4 +192,4 @@ def labs():
 		return 'failed'
 
 if __name__ == '__main__':
-	app.run(debug=DEBUG, host=HOST, port=PORT)
+	app.run(debug=DEBUG, host=HOST, port=PORT)BUG, host=HOST, port=PORT)

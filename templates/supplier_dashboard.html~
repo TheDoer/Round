@@ -1,0 +1,151 @@
+{% extends 'seller-layout.html' %}
+
+{% block body %}
+
+	<div >
+		<div class="ui stackable padded grid" >
+			<div class="four wide column">
+				<p>&nbsp</p>
+				<p>&nbsp</p>
+				<div class="ui raised segment">
+				    <h1 class="ui dividing header"><i class="ui orange pie chart icon"></i>Statistics </h1>
+				    <div class="ui list">   
+				                <div class="item">
+				                	Stock
+				                    <div class="ui large message">                
+				                        Total
+				                        <div class="right floated content">				                           
+								    		{% if current_user.products.count() == None %}
+						                        <div class="two wide column">
+									    			<div class="ui large right aligned green label ">{{ 0 }}</div>
+									    		</div>
+					                      	{% else%}
+					                      		<div class="two wide column">
+									    			<div class="ui large right aligned green label ">{{ current_user.products.count() }}</div>
+									    		</div>
+					                      	{% endif %}
+				                        </div>
+				                    </div>
+				                </div>
+
+				                <p>&nbsp</p>
+
+				                <div class="item">
+				                	Sales
+				                	<div class="ui large message">                
+				                        Total
+				                        <div class="right floated content">
+				                        {% for stock in Stock.select(Stock, fn.sum(Stock.price * Stock.minimum_quantity).alias('total_sales')).where(Stock.bought==True) %}
+				                        	{% if stock.total_sales == None %}
+						                        <div class="two wide column">
+									    			<div class="ui large right aligned green label ">${{ 0 }}</div>
+									    		</div>
+					                      	{% else%}
+					                      		<div class="two wide column">
+									    			<div class="ui large right aligned green label ">${{ stock.total_sales }}</div>
+									    		</div>
+					                      	{% endif %}
+					                      	{% endfor %}
+				                        </div>
+				                    </div>
+				                </div>
+				    </div>
+				</div>
+			</div>
+
+			<div class="twelve wide column" >
+				<p>&nbsp</p>
+				<p>&nbsp</p>	
+				<div class="ui segment">
+					<div class="ui ">
+						<div class="ui padded stackable grid">					
+							<div class="ui orange attached message row">
+								<div class="two wide column">			    			
+					    			<div class="ui "><i class="ui payment icon"></i>Product</div>
+					    		</div>
+
+					    		<div class="two wide column">			    			
+					    			<div class="ui ">Brand</div>
+					    		</div>
+
+					    		<div class="two wide column">
+					    			<div class="ui ">Description</div>
+					    		</div>
+
+					    		<div class="two wide column">
+					    			<div class="ui ">Units</div>
+					    		</div>
+
+					    		<div class="two wide column">
+					    			<div class="ui ">Target</div>
+					    		</div>
+
+					    		<div class="two wide column">
+					    			<div class="ui ">Current</div>
+					    		</div>
+
+					    		<div class="two wide column">
+					    			<div class="ui ">Total price</div>
+					    		</div>
+					    	</div>
+						</div>
+					</div>
+
+					<div class="ui " >
+					    <div class="ui padded stackable grid" style="height: 650px;">
+					    	{% for stock in my_stocks %}
+					    	{% if list(my_stocks).index(stock) % 2 == 0 %}
+					    		<div class="ui row">
+					    	{% else %}
+					    		<div class="ui blue row">
+					    	{% endif %}
+					    	
+								<div class="two wide column">			    			
+					    			<div class="ui ">{{ stock.product.name }}</div>
+					    		</div>
+
+					    		<div class="two wide column">			    			
+					    			<div class="ui ">{{ stock.brand.name }}</div>
+					    		</div>
+
+					    		<div class="two wide column">
+					    			<div class="ui ">{{ stock.first_description.description }}</div>
+					    		</div>
+
+					    		<div class="two wide column">
+					    			<div class="ui ">{{ stock.quantity }} {{ stock.unit.short_name }}</div>
+					    		</div>
+
+					    		<div class="two wide column">
+					    			<div class="ui ">{{ stock.minimum_quantity }}</div>
+					    		</div>
+
+					    		{% if (Order.select(fn.sum(Order.quantity)).where(Order.stock==stock.id).scalar()) == None %}
+			                        <div class="two wide column">
+						    			<div class="ui ">{{ 0 }}</div>
+						    		</div>
+		                      	{% else%}
+		                      		<div class="two wide column">
+						    			<div class="ui ">{{ (Order.select(fn.sum(Order.quantity)).where(Order.stock==stock.id).scalar()) }}</div>
+						    		</div>
+		                      	{% endif %}
+
+					    		<div class="two wide column">
+					    			<div class="ui ">${{ stock.price * stock.minimum_quantity}}</div>
+					    		</div>
+					    	</div>
+					    	{% endfor %}
+					</div>
+					
+					<div class="ui padded stackable grid">					
+							<a class="ui orange bottom attached message button row" href="disbursements.html">
+								<div class="sixteen wide column center aligned">			    			
+					    			View more...
+					    		</div>
+					    	</a>
+						</div>
+				</div>				
+			</div>
+		</div>
+    </div>
+{% endblock %}

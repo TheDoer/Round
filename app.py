@@ -7,6 +7,8 @@ from flask_login import LoginManager, login_user, logout_user, current_user, log
 
 from models import *
 
+import forms
+
 
 DEBUG = True
 PORT = 3000
@@ -37,20 +39,18 @@ def allowed_file(filename):
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
-	try:
-		email = dict(request.form.items())['email']
-		password = dict(request.form.items())['password']
-		address = dict(request.form.items())['address']
-		account_type = dict(request.form.items())['account_type']
-		#code = dict(request.form.items())['code']
-		phone = dict(request.form.items())['phone']
+	register_form = forms.RegisterForm()
 
-		#phone = int(str(code) + str(phone))
-
-		User.create_user(username='unknown', email=email, password=password, address=address,
-			account_type=account_type, phone=phone)
-
-		user = User.get(User.email==email)
+	if register_form.validate_on_submit():
+		User.create_user(
+			username='unknown', 
+			email=register_form.email.data,
+			password=register_form.password.data,
+			address=register_form.address.data,
+			account_type='buyer',
+			phone=register_form.phone.data)
+		
+		user = User.get(User.email==register_form.email.data)
 
 		login_user(user)
 
@@ -60,10 +60,8 @@ def register():
 			return redirect(url_for('supplier'))
 		else:
 			return redirect(url_for('shipping'))
-
-	except KeyError:
-		flash('Please fill all fields')
-		return render_template('register.html')
+	
+	return render_template('register.html', form=register_form)
 
 @app.route('/supplier-register', methods=['POST', 'GET'])
 def supplier_register():
@@ -103,39 +101,27 @@ def index():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-	flash('Enter login details', 'info')
-	return render_template('login.html')
+	login_form = forms.LoginForm()
 
-@app.route('/login-aunth', methods=['POST', 'GET'])
-def login_aunth():
-	try:
-		email = dict(request.form.items())['email']
-		password = dict(request.form.items())['password']
+	if login_form.validate_on_submit():
+		try:
+			user = User.get(User.email == login_form.email.data)
 
-		user = User.get(User.email==email)
+			if user.password == login_form.password.data:
+				login_user(user)
 
-		if password != user.password:
-			flash('Invalid login', 'error')
-			return redirect(url_for('login'))
-		else:
-			login_user(user)
-
-			if user.account_type == 'buyer':
-				return redirect(url_for('buyer'))
-			elif user.account_type == 'supplier':
-				return redirect(url_for('supplier'))
+				if user.account_type == 'buyer':
+					return redirect(url_for('buyer'))
+				elif user.account_type == 'supplier':
+					return redirect(url_for('supplier'))
+				else:
+					redirect(url_for('shipping'))
 			else:
-				redirect(url_for('shipping'))
+				pass
+		except DoesNotExist:
+			pass
 
-	except KeyError: #some required fields blanks
-		flash('Enter all details', 'info')
-		return redirect(url_for('login'))
-	except DoesNotExist: #user not found in database
-		flash("Invalid login", 'error')
-		return redirect(url_for('login'))
-
-	flash('Enter login details', 'info')
-	return render_template('login.html')
+	return render_template('login.html', form=login_form)
 
 @app.route('/logout', methods=['POST', 'GET'])
 def logout():
@@ -152,10 +138,39 @@ def buyer():
 		Order=Order, Stock=Stock, fn=fn, my_orders=my_orders, list=list)
 
 
-@app.route('/buyer/feed')
+@app.route('/buyer/feed', methods=['POST', 'GET'])
 @app.route('/buyer/feed/<product>')
 @login_required
 def buyer_feed(product=None):
+	order_form = forms.OrderForm()
+
+	if order_form.validate_on_submit():
+		quantity = order_form.quantity.data
+		stock_id = dict(request.form.items())['stock_id']
+		stock = Stock.get(Stock.id==stock_id)
+
+		orders = Order.select(fn.sum(Order.quantity)).where(Order.stock==stock.id).scalar() #Get the current number of orders
+
+		if orders == None: #I don't want a TypeError below
+			orders = 0
+
+		needed = stock.minimum_quantity - orders
+
+		if quantity <= needed: #verify if quantity is less than or equal to the needed orders
+			price = quantity * stock.price #calculate the amount the buyer has to pay
+			Order.make_order(buyer=current_user.id, stock=stock, quantity=quantity, price=price)
+
+			if stock.minimum_quantity == Order.select(fn.sum(Order.quantity)).where(Order.stock==stock.id).scalar(): #check if the target has been met
+				stock.bought = True #update stock and set it to saved
+				stock.save()
+				orders = Stock.get(Stock.id==stock_id).orders
+
+				for order in orders:
+					order.ready = True
+					order.save()
+		else:
+			flash('Your order exceeds the needed quantity of {}'.format(needed), 'error')
+	
 	if product == None:
 		stocks = Stock.select().where(Stock.bought==False)
 	else:
@@ -168,7 +183,7 @@ def buyer_feed(product=None):
 	tags.sort()
 
 	return render_template('buyer-feed.html', stocks=stocks, current_user=current_user,
-		Order=Order, Stock=Stock, tags=tags, fn=fn)
+		Order=Order, Stock=Stock, tags=tags, fn=fn, forms=forms)
 
 @app.route('/buyer/how-it-works', methods=['POST', 'GET'])
 @login_required
@@ -256,7 +271,7 @@ def seller_add_product():
 		image =  request.files['image']
 		if image and allowed_file(image.filename):
 			filename = secure_filename(image.filename)
-			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+			image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 
 		product, created = Product.create_or_get(name=product)
 		brand, created = Brand.create_or_get(name=brand, image=image.filename)
@@ -323,12 +338,14 @@ def shipping():
 def submit_product():
 	return render_template('supplier_submit_product.html', current_user=current_user)
 
-@app.route('/order/<stock_id>/<quantity>')
+@app.route('/order', methods=['POST'])
 @login_required
-def order(stock_id=None, quantity=''):
-	quantity = int(quantity)
+def order():
+	order_form = forms.OrderForm()
 
-	if quantity != '' and quantity > 0: #validate the quantity given
+	if order_form.validate_on_submit():
+		quantity = order_form.quantity.data
+		stock_id = dict(request.form.items())['stock_id']
 		stock = Stock.get(Stock.id==stock_id)
 
 		orders = Order.select(fn.sum(Order.quantity)).where(Order.stock==stock.id).scalar() #Get the current number of orders
@@ -375,8 +392,6 @@ def order(stock_id=None, quantity=''):
 				'''
 		else:
 			flash('Your order exceeds the needed quantity of {}'.format(needed), 'error')
-	else:
-		flash('Invalid quantity', 'error')
 
 	return redirect(url_for('buyer_feed'))
 

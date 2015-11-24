@@ -21,6 +21,7 @@
   <link rel="stylesheet" type="text/css" href="/static/components/form.css">
   <link rel="stylesheet" type="text/css" href="/static/components/input.css">
   <link rel="stylesheet" type="text/css" href="/static/components/button.css">
+  <link rel="stylesheet" type="text/css" href="/static/components/label.css">
   <link rel="stylesheet" type="text/css" href="/static/components/list.css">
   <link rel="stylesheet" type="text/css" href="/static/components/message.css">  
   <link rel="stylesheet" type="text/css" href="/static/uiux/semantic-ui/UI-Icon-master/icon.min.css">
@@ -33,26 +34,21 @@
   <script src="/static/components/form.js"></script>
   <script src="/static/components/transition.js"></script>
 
-  <style type="text/css">
-    body {
-      background-color: #DADADA;
-    }
-    body > .grid {
-      height: 100%;
-    }
-    .image {
-      margin-top: -100px;
-    }
-    .column {
-      max-width: 450px;
-    }
-  </style>
-   
+
    <style type="text/css">
 
   body {
     background-color: #FFFFFF;
   }
+
+  .image {
+    margin-top: -100px;
+  }
+  
+  .column {
+    max-width: 450px;
+  }
+
   .main.container {
     margin-top: 2em;
   }
@@ -148,67 +144,34 @@
 -->
 </head>
 <body>
-
-
-
-
 <div class="ui middle aligned center aligned grid">
-  <div class="column">
-    <h2 class="ui teal image header">
-      <img src="/static/assets/images/logo.png" class="image">
-      <div class="ui orange header">
-        Register and Enjoy Round and Group buying.
+  <div class="row">
+    <p>&nbsp</p>
+    <p>&nbsp</p>
+  </div>
+  <div class="row">
+    <div class="column">
+      <h2 class="ui teal image header">
+        <img src="/static/assets/images/logo.png" class="image">
+        <div class="ui orange header">
+          Register and Enjoy Round and Group buying.
+        </div>
+      </h2>
+
+      <form method="POST" action="" class="ui large form segment">
+        {% from 'macros.html' import render_field %}
+
+        {{ form.hidden_tag() }}
+        {% for field in form %}
+          {{ render_field(field) }}
+        {% endfor %}
+        
+        <button class="ui fluid large teal submit button" type="submit" id="submit">Login!</button>
+      </form>
+
+      <div class="ui message">
+        Already have an Account? <a href="{{ url_for('login') }}">Login</a>
       </div>
-    </h2>
-    <form class="ui large form" action="{{ url_for('register') }}" method="POST">
-      <div class="ui stacked segment">
-        <div class="field">
-          <div class="ui left icon input">
-            <i class="mail icon"></i>
-            <input type="text" name="email" placeholder="email Address">
-          </div>
-        </div>
-
-        <div class="field">
-          <div class="ui left icon input">
-            <i class="lock icon"></i>
-            <input type="password" name="password" placeholder="Password">
-          </div>
-        </div>
-
-        <div class="field">
-          <div class="ui left icon input">
-            <i class="phone icon"></i>
-            <input type="text" name="phone" placeholder="Contact Number">
-          </div>
-        </div>
-
-        <div class="field">
-          <div class="ui left icon input">
-            <textarea name="address" placeholder="Address" required></textarea>
-          </div>
-        </div>
-
-        <div class="field">
-          <div class="ui left icon input">
-            <i class="user icon"></i>
-            <select class="" name="account_type" required>
-              <option value=""></option>
-              <option value="buyer">Buyer</option>
-              <option value="supplier">Supplier</option>
-            </select>
-          </div>
-        </div>
-
-        <button class="ui fluid large teal submit button">Register to RoundShopper</button>
-      </div>
-
-      <div class="ui error message"></div>
-
-    </form>
-
-    <div class="ui message">
-      Already have an Account? <a href="{{ url_for('login') }}">Login</a>
     </div>
   </div>
 </div>

@@ -1,0 +1,160 @@
+{% extends 'buyer-layout.html' %}
+
+{% block notifications %} 
+      <h3 class="ui right floated header">
+        <a class="ui large image label" href="{{ url_for('logout') }}">
+          <img src="/static/img/profile/koala.jpg">
+          {{ current_user.email }}
+          <div class="label detail" >Logout</div>
+        </a>
+    
+      <h3 class="ui right floated header">
+        <div class="ui fluid large dropdown image label" tabindex="0">
+          <i class="cart icon"></i>
+          Orders &nbsp &nbsp
+          <div class="floating circular ui red label">{{ current_user.orders.where(Order.ready==False).count() }}</div>
+
+            <div class="ui divided selection list">
+              {% for order in current_user.orders.where(Order.ready==False).order_by(Order.date_ordered.desc()) %}
+              <a class="item">
+                <div class="content">
+                  <div class="header">
+                    <i class="right cart icon"></i>
+                    {{ order.quantity }} x 
+                    {{ order.stock.quantity }} {{ order.stock.unit.short_name }}
+                    {{ order.stock.brand.name }}
+                    {{ order.stock.first_description.description }}
+                    {{ order.stock.product.name }}
+                    </div>
+                  <div class="">
+                    Order No: {{ order.id }} <br>
+                    Price: ${{ order.price }}<br><br>
+                    <div class="ui info" >
+                      <i class="info circle icon"></i>
+                      Still waiting for {{ order.stock.minimum_quantity - Order.select(fn.sum(Order.quantity)).where(Order.stock==order.stock.id).scalar() }} units to be ordered
+                    </div>
+                  </div>
+                </div>
+              </a>
+              {% endfor %}
+            </div>
+        </div>
+
+      <h3 class="ui right floated header">
+        <div class="ui fluid large dropdown image label">
+          <i class="alarm icon"></i>
+          Notifications &nbsp
+          <div class="floating circular ui red label">{{ current_user.orders.where(Order.ready==True).count() }}</div>
+
+        <div class="menu" tabindex="-1" style="height: 400px; overflow-y: scroll;">
+            <div class="header">
+              Search Notifications
+            </div>
+            <div class="ui fluid left icon input">
+              <i class="search icon"></i>
+              <input type="text" name="search" placeholder="Search...">
+            </div>
+
+            <div class="ui divided selection list">
+              {% for order in current_user.orders.where(Order.ready==True).order_by(Order.date_ordered.desc()) %}
+              <a class="item">
+                <div class="content">
+                  <div class="header">
+                    <i class="right cart icon"></i>
+                    {{ order.quantity }} x 
+                    {{ order.stock.quantity }} {{ order.stock.unit.short_name }}
+                    {{ order.stock.brand.name }}
+                    {{ order.stock.first_description.description }}
+                    {{ order.stock.product.name }}
+                    </div>
+                  <div class="">
+                    Order No: {{ order.id }} <br>
+                    Price: ${{ order.price }}<br><br>
+                    <div class="ui info" >
+                      <i class="shipping icon"></i>
+                      Congratulations your order will be shipped on MY BIRTHDAY 
+                    </div>
+                  </div>
+                </div>
+              </a>
+              {% endfor %}
+            </div>
+          </div>
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="ui padded stackable grid">
+      <div class="eight wide column">
+          {% for stock in stocks %}
+        <div class="ui segment">
+           <div class="ui divided items">
+              <div class="item">
+                <div class="ui small image">
+                  <img src="/static/img/shop-placeholder.png">
+                  <div class="ui red top left attached label"><strong>${{ stock.stock.price }}</strong></div>
+                </div>
+                
+                <div class="content">
+                  <a class="header">{{ stock.stock.product.name }}</a>
+                  <a class="ui label">{{ stock.stock.quantity }} {{ stock.stock.unit.short_name }} </a>
+                  <a class="ui label"><i class="ui yellow like icon"></i>{{ stock.stock.brand.name }}</a>
+                  <a class="ui label">{{ stock.stock.first_description.description }}</a>
+                  <a class="ui label">{{ stock.stock.second_description.description }}</a>
+                  <a class="ui label">{{ stock.stock.third_description.description }}</a>
+                  <div class="meta">
+                    
+                  </div>
+                  <hr>
+                  <div class="description">
+                    <div class="ui items selection list">
+                      <div class="item">
+                        <strong>Target:</strong>
+                        <div class="ui red horizontal label">{{ stock.stock.minimum_quantity }}</div>units                  
+                      </div>
+                      {% if (Order.select(fn.sum(Order.quantity)).where(Order.stock==stock.stock.id).scalar()) == None %}
+                        <div class="item">
+                          <strong>Current:</strong>
+                            <div class="ui green horizontal label">                          
+                              {{ 0 }}
+                            </div>units                                          
+                        </div>
+                        <div class="item">
+                          <strong>Needed:</strong>
+                          <div class="ui blue horizontal label">{{ stock.stock.minimum_quantity }}</div>units                  
+                        </div>
+                      {% else%}
+                        <div class="item">
+                            <strong>Current:</strong>
+                              <div class="ui green horizontal label">                          
+                              {{ (Order.select(fn.sum(Order.quantity)).where(Order.stock==stock.stock.id).scalar()) }}
+                              </div>units                                          
+                          </div>
+                          <div class="item">
+                            <strong>Needed:</strong>
+                            <div class="ui blue horizontal label">{{ stock.stock.minimum_quantity -  (Order.select(fn.sum(Order.quantity)).where(Order.stock==stock.stock.id).scalar()) }}</div>units                  
+                          </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div align="right" class="extra">
+                    <div class="ui small action input">
+                      <input type="hidden" name="stock_id" value="{{ stock.stock.id }}">
+                      <input id="order-{{ stock.stock.id }}" type="number" name="quantity" value="0">
+                      <div class="ui blue right labeled icon button" onclick="order({{ stock.id }})">
+                        <i class="shop icon"></i>
+                        Order
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>          
+        </div>
+        {% endfor %}
+      </div>
+      <div class="eight wide column"></div>
+    </div>
+
+{% endblock %}

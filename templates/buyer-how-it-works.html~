@@ -1,0 +1,84 @@
+{% extends 'buyer-layout.html' %}
+
+{% block body %}
+	<div class="ui padded stackable grid">
+			<div class="one wide column"></div>
+			<div class="fourteen wide column">
+				<p>&nbsp</p>
+				<p>&nbsp</p>
+				<div class="ui raised segment">	
+				<h1 class="ui dividing header">
+				  	<i class="ui orange settings icon"></i>
+				  	How it works
+				</h1>	
+				  {% with messages = get_flashed_messages(True) %}
+				  	{% for category, message in messages %}
+				  		<div class="ui fluid {{ category }} message">
+				  			<i class="ui close icon"></i>
+				  			<div class="ui header">{{ category }}</div>
+				  			{{ message }}
+				  		</div>
+				  	{% endfor %}
+				  {% endwith %}
+					  <div class="ui raised segment items">
+						  <div class="item">
+							<div class="">
+								<img class="ui left floated medium circular image" src="/static/img/shop-placeholder.png">
+							</div>	
+							<div class="content">
+							  <a class="header">My Neighbor Totoro</a>
+							  <div class="meta">
+								<span class="cinema">IFC Cinema</span>
+							  </div>
+							  <div class="description">
+								<p></p>
+							  </div>
+							  <div class="extra">
+								<div class="ui label">Limited</div>
+							  </div>
+							</div>					
+						  </div>
+						</div>
+						
+						<div class="ui raised segment items">
+						  <div class="item">
+							<div class="">
+								<img class="ui left floated medium circular image" src="/static/img/shop-placeholder.png">
+							</div>	
+							<div class="content">
+							  <a class="header">My Neighbor Totoro</a>
+							  <div class="meta">
+								<span class="cinema">IFC Cinema</span>
+							  </div>
+							  <div class="description">
+								<p></p>
+							  </div>
+							  <div class="extra">
+								<div class="ui label">Limited</div>
+							  </div>
+							</div>					
+						  </div>
+						</div>
+						
+						<div class="ui raised segment items">
+						  <div class="item">
+							<div class="">
+								<img class="ui left floated medium circular image" src="/static/img/shop-placeholder.png">
+							</div>	
+							<div class="content">
+							  <a class="header">My Neighbor Totoro</a>
+							  <div class="meta">
+								<span class="cinema">IFC Cinema</span>
+							  </div>
+							  <div class="description">
+								<p></p>
+							  </div>
+							  <div class="extra">
+								<div class="ui label">Limited</div>
+							  </div>
+							</div>					
+						  </div>
+						</div>
+			</div>
+		</div>
+{% endblock %}

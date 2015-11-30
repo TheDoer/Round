@@ -13,6 +13,7 @@ import forms
 DEBUG = True
 PORT = 3000
 HOST = 'localhost'
+#HOST = '107.170.222.86'
 UPLOAD_FOLDER = 'static/img/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 

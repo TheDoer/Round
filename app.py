@@ -10,9 +10,9 @@ from models import *
 import forms
 
 
-DEBUG = True
-PORT = 3000
-HOST = 'localhost'
+#DEBUG = True
+#PORT = 3000
+#HOST = 'localhost'
 UPLOAD_FOLDER = 'static/img/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
@@ -418,4 +418,5 @@ def labs():
 	return render_template('mapbox.html')
 
 if __name__ == '__main__':
-	app.run(debug=DEBUG, host=HOST, port=PORT)
+	app.run()
+	#app.run(debug=DEBUG, host=HOST, port=PORT)

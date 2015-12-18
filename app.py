@@ -13,7 +13,6 @@ import forms
 DEBUG = True
 PORT = 3000
 HOST = 'localhost'
-#HOST = '107.170.222.86'
 UPLOAD_FOLDER = 'static/img/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
@@ -140,43 +139,51 @@ def buyer():
 
 
 @app.route('/buyer/feed', methods=['POST', 'GET'])
-@app.route('/buyer/feed/<product>')
+@app.route('/buyer/feed/<product>/<page>')
+@app.route('/buyer/feed/<page>')
 @login_required
-def buyer_feed(product=None):
-	order_form = forms.OrderForm()
+def buyer_feed(product=None, page=None):
+	feeds_per_page = 5
 
-	if order_form.validate_on_submit():
-		quantity = order_form.quantity.data
-		stock_id = dict(request.form.items())['stock_id']
-		stock = Stock.get(Stock.id==stock_id)
+	if page == None:
+		page = 1
 
-		orders = Order.select(fn.sum(Order.quantity)).where(Order.stock==stock.id).scalar() #Get the current number of orders
-
-		if orders == None: #I don't want a TypeError below
-			orders = 0
-
-		needed = stock.minimum_quantity - orders
-
-		if quantity <= needed: #verify if quantity is less than or equal to the needed orders
-			price = quantity * stock.price #calculate the amount the buyer has to pay
-			Order.make_order(buyer=current_user.id, stock=stock, quantity=quantity, price=price)
-
-			if stock.minimum_quantity == Order.select(fn.sum(Order.quantity)).where(Order.stock==stock.id).scalar(): #check if the target has been met
-				stock.bought = True #update stock and set it to saved
-				stock.save()
-				orders = Stock.get(Stock.id==stock_id).orders
-
-				for order in orders:
-					order.ready = True
-					order.save()
-		else:
-			flash('Your order exceeds the needed quantity of {}'.format(needed), 'error')
-	
 	if product == None:
-		stocks = Stock.select().where(Stock.bought==False)
+		stocks = Stock.select().where(Stock.bought==False).paginate(int(page), feeds_per_page)
 	else:
-		stocks = Product.get(Product.name==product).in_stock.where(Stock.bought==False)
-	stocks = [{'id': json.dumps(str(stock.id)) , 'stock': stock } for stock in stocks] # this will be used for adding listings to the homepage
+		stocks = Product.get(Product.name==product).in_stock.where(Stock.bought==False).paginate(int(page), feeds_per_page)
+
+	stocks = [{'id': json.dumps(str(stock.id)) , 'stock': stock, 'form': forms.OrderForm() } for stock in stocks] # this will be used for adding listings to the homepage
+
+	stock_ids = [stock['id'] for stock in stocks ]
+
+	for stock in stocks:	
+		if stock['form'].validate_on_submit():
+			quantity = order_form.quantity.data
+			stock_id = dict(request.form.items())['stock_id']
+			stock = Stock.get(Stock.id==stock_id)
+
+			orders = Order.select(fn.sum(Order.quantity)).where(Order.stock==stock.id).scalar() #Get the current number of orders
+
+			if orders == None: #I don't want a TypeError below
+				orders = 0
+
+			needed = stock.minimum_quantity - orders
+
+			if quantity <= needed: #verify if quantity is less than or equal to the needed orders
+				price = quantity * stock.price #calculate the amount the buyer has to pay
+				Order.make_order(buyer=current_user.id, stock=stock, quantity=quantity, price=price)
+
+				if stock.minimum_quantity == Order.select(fn.sum(Order.quantity)).where(Order.stock==stock.id).scalar(): #check if the target has been met
+					stock.bought = True #update stock and set it to saved
+					stock.save()
+					orders = Stock.get(Stock.id==stock_id).orders
+
+					for order in orders:
+						order.ready = True
+						order.save()
+			else:
+				flash('Your order exceeds the needed quantity of {}'.format(needed), 'error')
 
 	tags = [product.name for product in Product.select()]
 	tags += [descriptor.description for descriptor in Descriptor.select()]
@@ -184,7 +191,7 @@ def buyer_feed(product=None):
 	tags.sort()
 
 	return render_template('buyer-feed.html', stocks=stocks, current_user=current_user,
-		Order=Order, Stock=Stock, tags=tags, fn=fn, forms=forms)
+		Order=Order, Stock=Stock, tags=tags, fn=fn, int=int)
 
 @app.route('/buyer/how-it-works', methods=['POST', 'GET'])
 @login_required
@@ -342,10 +349,8 @@ def submit_product():
 @app.route('/order', methods=['POST'])
 @login_required
 def order():
-	order_form = forms.OrderForm()
-
-	if order_form.validate_on_submit():
-		quantity = order_form.quantity.data
+	try:
+		quantity = int(dict(request.form.items())['quantity'])
 		stock_id = dict(request.form.items())['stock_id']
 		stock = Stock.get(Stock.id==stock_id)
 
@@ -356,7 +361,7 @@ def order():
 
 		needed = stock.minimum_quantity - orders
 
-		if quantity <= needed: #verify if quantity is less than or equal to the needed orders
+		if (quantity <= needed and quantity >= stock.minimum_quantity/10) or quantity == needed: #verify if quantity is less than or equal to the needed orders
 			price = quantity * stock.price #calculate the amount the buyer has to pay
 			Order.make_order(buyer=current_user.id, stock=stock, quantity=quantity, price=price)
 
@@ -394,24 +399,23 @@ def order():
 		else:
 			flash('Your order exceeds the needed quantity of {}'.format(needed), 'error')
 
+	except KeyError:
+		pass
+
 	return redirect(url_for('buyer_feed'))
 
 @app.route('/labs', methods=['POST', 'GET'])
 def labs():
-	try:
-		long_name = dict(request.form.items())['long-name']
-		short_name = dict(request.form.items())['short-name']
+	import requests
+	import json
 
-		unit, created = Unit.create_or_get(short_name=short_name, long_name=long_name)
+	send_url = 'http://freegeoip.net/json'
+	r = requests.get(send_url)
+	j = json.loads(r.text)
+	lat = j['latitude']
+	lon = j['longitude']
 
-		if created:
-			flash('Unit added successfully', 'success')
-		else:
-			flash('Unit already exists', 'error')
+	return render_template('mapbox.html')
 
-		return redirect(url_for('labs'))
-	except KeyError:
-		flash('Fill in all fields', 'info')
-		return render_template('add-unit.html')
 if __name__ == '__main__':
 	app.run(debug=DEBUG, host=HOST, port=PORT)

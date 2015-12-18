@@ -41,6 +41,10 @@
                           <strong>Needed:</strong>
                           <div class="ui blue horizontal label">{{ stock.stock.minimum_quantity }}</div>units                  
                         </div>
+                        <div class="item">
+                          <strong>MOQ:</strong>
+                          <div class="ui orange horizontal label">{{ int(stock.stock.minimum_quantity/10) }}</div>units                  
+                        </div>
                       {% else%}
                         <div class="item">
                             <strong>Current:</strong>
@@ -52,32 +56,40 @@
                             <strong>Needed:</strong>
                             <div class="ui blue horizontal label">{{ stock.stock.minimum_quantity -  (Order.select(fn.sum(Order.quantity)).where(Order.stock==stock.stock.id).scalar()) }}</div>units                  
                           </div>
+                          <div class="item">
+                            <strong>MOQ:</strong>
+                            <div class="ui orange horizontal label">{{ int(stock.stock.minimum_quantity/10) }}</div>units                  
+                          </div>
                       {% endif %}
                     </div>
                   </div>
                   <div align="right" class="extra">
+                    <!--
                   	<form class="form" action="" method="POST">
-						<div class="ui action input">
-	                      	<input type="hidden" name="stock_id" value="{{ stock.stock.id }}">
-						  	{% from 'macros.html' import render_field %}
+          						<div class="ui action input">
+          	                      	<input type="hidden" name="stock_id" value="{{ stock.stock.id }}">
+          						  	{% from 'macros.html' import render_field %}
 
-						    {{ forms.OrderForm().hidden_tag() }}
-						    {% for field in forms.OrderForm() %}
-						    	{{ render_field(field) }}
-						    {% endfor %}
-						    
-						  	<button class="ui teal right labeled icon button">Order<i class="add cart icon"></i></button>
-						</div>
-					</form>
+          						    {{ stock.form.hidden_tag() }}
+          						    {% for field in stock['form'] %}
+          						    	{{ render_field(field) }}
+          						    {% endfor %}
+          						    
+          						  	<button class="ui teal right labeled icon button">Order<i class="add cart icon"></i></button>
+          						</div>
+          					</form>
+                  -->
 
-                    <div class="ui small action input">
-                      <input type="hidden" name="stock_id" value="{{ stock.stock.id }}">
-                      <input id="order-{{ stock.stock.id }}" type="number" name="quantity" value="0">
-                      <div class="ui blue right labeled icon button" onclick="order({{ stock.id }})">
-                        <i class="shop icon"></i>
-                        Order
+                    <form action="{{ url_for('order') }}" method="POST">  
+                      <div class="ui small action input">
+                        <input type="hidden" name="stock_id" value="{{ stock.stock.id }}">
+                        <input id="order-{{ stock.stock.id }}" type="number" name="quantity" >
+                        <button class="ui blue right labeled icon button" >
+                          <i class="shop icon"></i>
+                          Order
+                        </button>
                       </div>
-                    </div>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -88,4 +100,22 @@
       <div class="eight wide column"></div>
     </div>
 
+{% endblock %}
+
+{% block ajax %}
+  <script type="text/javascript">
+    setTimeout(function(){
+      var stockIDs =[1, 2, 3];
+
+      (index = 0, len = stockIDs.length; index < len; ++index) {
+        // make a request to get order details 
+        
+          //$("#" + stockID).html(result);
+          console.log(stockID[index]);
+        //});
+      }
+      }, 3000
+    );
+
+  </script>
 {% endblock %}

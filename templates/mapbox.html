@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Geolocation</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.js'></script>
+<link href='https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.css' rel='stylesheet' />
+
+</head>
+<body>
+<div id='map'></div>
+<script>
+L.mapbox.accessToken = 'pk.eyJ1IjoidGF0ZW5kYSIsImEiOiJjaWhnNzZsZmUwMDhhdTJtNDd0bmJnaDk0In0.dv-XT9CXQ9MMpeyHSGf9Jw';
+var map = L.mapbox.map('map', 'mapbox.streets');
+
+// This uses the HTML5 geolocation API, which is available on
+// most mobile browsers and modern browsers, but not in Internet Explorer
+//
+// See this chart of compatibility for details:
+// http://caniuse.com/#feat=geolocation
+if (!navigator.geolocation) {
+  console.log('Navigation disabled');
+} 
+else {
+  map.locate();
+}
+
+// Once we've got a position, zoom and center the map
+// on it, and add a single marker.
+map.on('locationfound', function(e) {
+    console.log(e.latlng.lat + ' & ' + e.latlng.lng);
+});
+
+// If the user chooses not to allow their location
+// to be shared, display an error message.
+
+</script>
+</body>
+</html>

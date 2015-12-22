@@ -30,6 +30,10 @@
   <link rel="stylesheet" type="text/css" href="/static/components/button.css">
   <link rel="stylesheet" type="text/css" href="/static/components/list.css">
   <link rel="stylesheet" type="text/css" href="/static/components/message.css">
+  <link rel="stylesheet" type="text/css" href="/static/components/popup.css">
+  <link rel="stylesheet" type="text/css" href="/static/components/popup.min.css">
+  <link rel="stylesheet" type="text/css" href="/static/components/popup.min.js">
+
 
 <!-- Main RoundShopper Styling Directory Properities -->
 
@@ -94,6 +98,39 @@
       $('.main.menu  .ui.dropdown').dropdown({
         on: 'hover'
       });
+    })
+  ;
+  </script>
+
+  <!--- Example CSS -->
+  <style>
+  body {
+    padding: 1em;
+  }
+  .ui.menu {
+    margin: 1em 0em;
+  }
+  .ui.menu:last-child {
+    margin-bottom: 1px;
+  }
+  </style>
+
+  <!--- Example Javascript -->
+  <script>
+  $(document)
+    .ready(function() {
+      $('.ui.menu .ui.dropdown').dropdown({
+        on: 'hover'
+      });
+      $('.ui.menu a.item')
+        .on('click', function() {
+          $(this)
+            .addClass('active')
+            .siblings()
+            .removeClass('active')
+          ;
+        })
+      ;
     })
   ;
   </script>
@@ -212,20 +249,69 @@ $(document).ready(function() {
   </div> -->
 
 
-	<div class="ui inverted attached menu grid">
-		<a class="item">Delivery Information</a>
-	    <a class="item">Contact: +263 774 150 929</a>
-	    <div class="right menu">
-	      <a class="ui teal button" href="{{ url_for('login') }}">Login</a>
-	      <a class="ui right floated orange button" href="{{ url_for('register') }}">sign up</a>
-		</div>
-	</div>
+<div class="ui inverted menu">
+{% if current_user.email == True %}
+  <div class="header item">Hi {{ current_user.email }}</div>
+{% else%}
+<div class="header item">Welcome</div>
+{% endif %}
+  <a class="item">Help Line: +263 774 150 929 </a>
+  <a class="item">Delivery Info</a>
+  <div class="item">
+      <div class="ui transparent inverted icon input">
+        <i class="search icon"></i>
+        <input type="text" placeholder="Search products">
+      </div>
+    </div>
+  
+  <div class="right menu">
+    
+    <div class="ui buttons">
+      <a class="ui inverted basic button" href="{{ url_for('login') }}">Login</a>
+      <div class="or"></div>
+      <a class="ui inverted blue basic button" href="{{ url_for('register') }}">Sign up</a>
+    </div>
+    <!-- <div class="ui dropdown item">
+    Login or Sign Up
+    <i class="dropdown icon"></i>
+    <div class="menu">
+      <div class="item">Action</div>
+      <div class="item">Another Action</div>
+      <div class="item">Something else here</div>
+      <div class="divider"></div>
+      <div class="item">Separated Link</div>
+      <div class="divider"></div>
+      <div class="item">One more separated link</div>
+    </div>
+      </div> -->
+  </div>
+</div>
+
+	<!-- <div class="ui inverted attached menu grid">
+    <a class="item">Delivery Information</a>
+      <a class="item">Contact: +263 774 150 929</a>
+  
+       <div class="right menu">
+     {% if current_user.email == None %}
+        <a class="ui teal button" href="{{ url_for('login') }}">Login</a>
+          <a class="ui right floated orange button" href="{{ url_for('register') }}">Sign up</a>
+     {% else%}
+     {% block logout %}
+        <div class="ui four wide column">
+        <a class="ui fluid item" href="{{ url_for('logout') }}">
+       
+      Hi {{ current_user.email }}
+        <i class="sign out icon"></i> 
+      </a>
+    </div>
+    {% endblock %}
+    {% endif %}
+  
+    </div>
+  </div> -->
 
 
   <div class="ui borderless main menu">
-    
-      
-      
         
   	<div class="ui stackable container menu">
 		<a class="item" href={{ url_for('index') }}>

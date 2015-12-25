@@ -260,20 +260,52 @@ $(document).ready(function() {
     
     <i class="dropdown icon"></i>
     <div class="menu">
-      <a class="item" href="{{url_for('buyer') }}">Dashboard</a>
-      <a class="item" href="{{url_for('buyer_feed') }}">Today Hottest Deals</a>
+     <a class="item" href="{{url_for('buyer_feed') }}">
+      <i class="shop icon"></i>
+      Daily Deals
+      </a>
+      <a class="item" 
+      href="{{url_for('buyer') }}">
+      <i class="dashboard icon"></i>
+      Dashboard
+      </a>
+       <a class="item"
+       href="{{url_for('buyer') }}">
+      <i class="alarm icon"></i>
+      Notifications
+      </a>
+      
       <div class="divider"></div>
 
-      <div class="item">Purchase History</div>
+      <a class="item">
+      <i class="history icon"></i>
+      Purchase History</a>
       <div class="divider"></div>
-      <div class="item">How it Works</div>
-       <div class="item">Help and Contact</div>
+
+      <a class="item"> 
+      
+     <i class="info circle icon"></i>
+      How it Works
+      </a>
+
+      <a class="item">
+      <i class="idea icon"></i>
+      Suggestions & Feedback</a>
+       <a class="item">
+       <i class="help circle icon"></i>
+
+       Help and Contact</a>
       <div class="divider"></div>
-     <a class="item" href="{{ url_for('logout') }}">Log out</a>
+      
+     <a class="item" href="{{ url_for('logout') }}">
+     <i class="sign out icon"></i>
+     Log out</a>
     </div>
   </div>
 {% else %}
-  <div class="ui dropdown item">
+<a class="item" href="{{ url_for('login') }}">Login</a>
+<a class="item" href="{{ url_for('register') }}">Register</a>
+  <!-- <div class="ui dropdown item">
    <div class="ui buttons">
       <a class="ui inverted basic button" href="{{ url_for('login') }}">Login</a>
       <div class="or"></div>
@@ -290,14 +322,22 @@ $(document).ready(function() {
       <div class="divider"></div>
       <div class="item">One more separated link</div>
     </div>
-  </div>
+  </div> -->
 
 {% endif %}
 
-
-
-  
   <div class="right menu">
+  {% if current_user.is_authenticated %}
+  <a class="item" href="{{url_for('buyer') }}">
+   <i class="shop icon"></i>
+    <div class="ui small red label">4</div>
+  </a>
+  {% else %}
+  <a class="item" href="{{url_for('buyer') }}">
+   <i class="shop icon"></i>
+    <div class="ui small red label">0</div>
+  </a>
+  {%endif%}
     
     <!-- <div class="ui buttons">
       <a class="ui inverted basic button" href="{{ url_for('login') }}">Login</a>

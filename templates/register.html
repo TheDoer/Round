@@ -152,10 +152,15 @@
   <div class="row">
     <div class="column">
       <h2 class="ui teal image header">
-        <img src="/static/assets/images/logo.png" class="image">
+      
+        <img src="/static/assets/images/logo.png"  class="image">
+      
+
         <div class="ui orange header">
-          Register and Enjoy Round and Group buying.
+
+          Register and Enjoy Group buying discounts.
         </div>
+
       </h2>
 
       <form method="POST" action="" class="ui large form segment">
@@ -166,11 +171,11 @@
           {{ render_field(field) }}
         {% endfor %}
         
-        <button class="ui fluid large teal submit button" type="submit" id="submit">Login!</button>
+        <button class="ui fluid large teal submit button" type="submit" id="submit">Register.</button>
       </form>
 
       <div class="ui message">
-        Already have an Account? <a href="{{ url_for('login') }}">Login</a>
+        Already have an Account? <a href="{{ url_for('login') }}">Login here.</a>
       </div>
     </div>
   </div>

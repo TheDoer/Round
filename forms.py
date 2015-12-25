@@ -38,7 +38,7 @@ def getuser():
 
 class RegisterForm(Form):
 	email = StringField(
-						'Email',
+						'Your Email',
 			   			   validators = [
 			   			   				 DataRequired(),
 			   			   				 Email(),
@@ -61,14 +61,14 @@ class RegisterForm(Form):
 						)
 	
 	phone = IntegerField(
-			   			   'Enter Quantity',
+			   			   'Contact Phone Number',
 			   			   validators = [
 			   			   					DataRequired(),
 											NumberRange(min=263710000000, message='Invalid phone number. Correct format: 263712345678')
 			   	])
 
 	address = TextAreaField(
-			   			   'Address',
+			   			   'Delivery Address',
 			   			   validators = [
 			   			   					DataRequired()
 			   	])

@@ -2,7 +2,7 @@ import json
 import os
 from werkzeug import secure_filename
 
-from flask import Flask, render_template, redirect, url_for, request, flash
+from flask import Flask, render_template, session, redirect, url_for, request, flash
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 
 from models import *

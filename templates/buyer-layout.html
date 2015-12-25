@@ -110,9 +110,9 @@
 {% block menu %}
  
 <div class="ui inverted segment">
-      <a class="ui inverted button" href="{{ url_for('index') }}">Home</a>
+      <a class="ui inverted button" href="{{ url_for('index') }}">RoundShopper</a>
       <a class="ui inverted button" href="{{url_for('buyer') }}">Dashboard</a>
-      <a class="ui inverted button" href="{{url_for('buyer_feed') }}">Main Feed</a>
+      <a class="ui inverted button" href="{{url_for('buyer_feed') }}">Shop</a>
       <!-- <a class="ui inverted button" href="{{url_for('buyer_make_suggestion') }}">Make Suggestions</a>
       <a class="ui inverted button" href="{{url_for('buyer_how_it_works') }}">How it works</a> -->
 
@@ -181,7 +181,7 @@
     </div>
 
    <div class="ui buttons">
-      <button class="ui button">Hello {{current_user.email}}</button>
+      <button class="ui button">Hi {{current_user.email}}</button>
       <div class="ui floating dropdown icon button">
         <i class="dropdown icon"></i>
         <div class="menu">

@@ -10,7 +10,9 @@
               <div class="ui item">
                 <div class="fluid image">
                   <img src="/static/img/{{ stock.stock.brand.image }}">
-                  <div class="ui red top left attached label"><strong>${{ stock.stock.price }}</strong></div>
+                  <div class="ui red top left attached label"><strong>
+                  <i class="dollar icon"></i>
+                  {{ stock.stock.price }}</strong></div>
                 </div>
                 
                 <div class="content">
@@ -85,8 +87,8 @@
                         <input type="hidden" name="stock_id" value="{{ stock.stock.id }}">
                         <input id="order-{{ stock.stock.id }}" type="number" name="quantity" >
                         <button class="ui blue right labeled icon button" >
-                          <i class="add cart icon"></i>
-                          Add to cart
+                          <i class="add to cart icon"></i>
+                          Add to Shop Basket
                         </button>
                       </div>
                     </form>
@@ -98,7 +100,26 @@
         {% endfor %}
       </div>
       <div class="eight wide column"></div>
+      <div class="ui pagination menu">
+  <a class="active item">
+    1
+  </a>
+  <div class="disabled item">
+    ...
+  </div>
+  <a class="item">
+    10
+  </a>
+  <a class="item">
+    11
+  </a>
+  <a class="item">
+    12
+  </a>
+</div>
     </div>
+
+
 
 {% endblock %}
 

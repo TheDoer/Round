@@ -2,37 +2,14 @@
 <html>
 <head>
 	<link rel="icon" type="/static/img/logo.png" href="">
-    <title>RoundShopper</title>
+    <title>RoundShopper.com</title>
     <link rel="stylesheet" type="text/css" href="/static/css/semantic.min.css">
     <link rel="stylesheet" type="text/css" href="/static/css/icon.css">
  
   </head>
 
 <body>
- 	 <!-- <div class="ui borderless main menu">
-           
-       <div class="ui stackable container menu">
-       <a class="item" href={{ url_for('index') }}>
-         <img class="ui mini circular image" src="/static/assets/images/logo.png"> &nbsp
-         <b>RoundShopper</b>
-         </a>
-         
-         {% for product in products %} 
-           <a href="{{ url_for('buyer_feed') }}/{{ product.name }}" class="item">{{ product.name }}</a>
-         {% endfor %} 
-      
-         <a class="item" href="{{ url_for('buyer_feed') }}">More</a>
-     
-     </div>
-       
-       
-     </div> -->
-  	<!-- <div class="ui teal inverted attached menu stackable grid">
-          <div class="ui row">        
-              {% block notifications %}
-              {% endblock %} 
-          </div>
-        </div> -->
+ 	 
     {% block menu %}
     {% endblock %}
 
@@ -50,3 +27,4 @@
   {% endblock %}
 
   </body>
+

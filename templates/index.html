@@ -139,7 +139,7 @@
   }
 
   .main.menu {
-    margin-top: 4em;
+    margin-top: 1em;
     border-radius: 0;
     border: none;
     box-shadow: none;
@@ -303,8 +303,77 @@ $(document).ready(function() {
     </div>
   </div>
 {% else %}
-<a class="item" href="{{ url_for('login') }}">Login</a>
-<a class="item" href="{{ url_for('register') }}">Register</a>
+<a class="item"
+href="{{url_for('login') }}">
+
+<i class="sign in icon"></i>
+
+Sign in 
+</a> 
+<div class="ui dropdown item">
+    Register
+    
+    <i class="dropdown icon"></i>
+    <div class="menu">
+
+     <a class="item" 
+      href="{{url_for('register') }}">
+      <i class="user icon"></i>
+      As an Individual
+      </a>
+
+   <div class="divider"></div>
+
+     <a class="item" href="{{url_for('login') }}">
+      <i class="shop icon"></i>
+      As a Retail Shop
+      </a>
+
+       <div class="divider"></div>
+
+      <a class="item" 
+      href="{{url_for('buyer') }}">
+      <i class="users icon"></i>
+      As a Group of People
+      </a>
+
+      <div class="divider"></div>
+
+       <a class="item"
+       href="{{url_for('buyer') }}">
+      <i class="university icon"></i>
+      As a School 
+      </a>
+      <div class="divider"></div>
+
+       <a class="item"
+       href="{{url_for('buyer') }}">
+      <i class="building outline icon"></i>
+      As a Manufacturer
+      </a>
+      
+      <div class="divider"></div>
+
+      <a class="item"> 
+      
+     <i class="info circle icon"></i>
+      How it Works
+      </a>
+
+      <a class="item">
+      <i class="idea icon"></i>
+      Suggestions & Feedback</a>
+       <a class="item">
+       <i class="help circle icon"></i>
+
+       Help and Contact</a>
+      <div class="divider"></div>
+      
+     <a class="item" href="{{ url_for('login') }}">
+     <i class="sign in icon"></i>
+     Sign in</a>
+    </div>
+  </div>
   <!-- <div class="ui dropdown item">
    <div class="ui buttons">
       <a class="ui inverted basic button" href="{{ url_for('login') }}">Login</a>
@@ -386,7 +455,7 @@ $(document).ready(function() {
 
   <div class="ui borderless main menu">
         
-  	<div class="ui stackable container menu">
+  	<!-- <div class="ui stackable container menu"> -->
 		<a class="item" href={{ url_for('index') }}>
 			<img class="ui mini circular image" src="/static/assets/images/logo.png"> &nbsp
 			<b>RoundShopper</b>
@@ -398,8 +467,8 @@ $(document).ready(function() {
 	 
 	  	<a class="item" href="{{ url_for('buyer_feed') }}">More</a>
   
-	</div>
-    
+	<!-- </div>
+ -->    
     
   </div>
 

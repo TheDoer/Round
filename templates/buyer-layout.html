@@ -110,44 +110,51 @@
 {% block menu %}
  
 <div class="ui inverted segment">
-      <a class="ui inverted button" href="{{ url_for('index') }}">RoundShopper</a>
-      <a class="ui inverted button" href="{{url_for('buyer') }}">Dashboard</a>
-      <a class="ui inverted button" href="{{url_for('buyer_feed') }}">Shop</a>
+      <a class="ui inverted button" 
+      href="{{ url_for('index') }}">
+
+      RoundShopper</a>
+      <a class="ui inverted button" 
+      href="{{url_for('buyer') }}">
+      <i class="dashboard icon"></i>
+      Dashboard</a>
+
+      <a class="ui inverted button" 
+      href="{{url_for('buyer_feed') }}">
+      <i class="shop icon"></i>
+      Shop</a>
       <!-- <a class="ui inverted button" href="{{url_for('buyer_make_suggestion') }}">Make Suggestions</a>
       <a class="ui inverted button" href="{{url_for('buyer_how_it_works') }}">How it works</a> -->
 
 
       <div class="ui floating search dropdown button">
-      <i class="cart icon"></i>
-      <span class="text">New Orders</span>
+      <i class="in cart icon"></i>
+      <span class="text">New Orders &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
       <div class="floating circular ui red label">
       {{ current_user.orders.where(Order.ready==False).count() }}
 	  </div>
-      <div class="menu">
+      <div class="menu" tabindex="-1" style="height: 500px; overflow-y: scroll;">
 
-        <div class="item">Arabic</div>
-        <div class="item">Chinese</div>
-        <div class="item">Danish</div>
-        <div class="item">Dutch</div>
-        <div class="item">English</div>
-        <div class="item">French</div>
-        <div class="item">German</div>
-        <div class="item">Greek</div>
-        <div class="item">Hungarian</div>
-        <div class="item">Italian</div>
-        <div class="item">Japanese</div>
-        <div class="item">Korean</div>
-        <div class="item">Lithuanian</div>
-        <div class="item">Persian</div>
-        <div class="item">Polish</div>
-        <div class="item">Portuguese</div>
-        <div class="item">Russian</div>
-        <div class="item">Spanish</div>
-        <div class="item">Swedish</div>
-        <div class="item">Turkish</div>
-        <div class="item">Vietnamese</div>
+      {% for order in current_user.orders.where(Order.ready==False).order_by(Order.date_ordered.desc()) %}
+
+        <div class="item"></div>
+       <i class="right cart icon"></i>
+										{{ order.quantity }} x 
+										{{ order.stock.quantity }} {{ order.stock.unit.short_name }}
+										{{ order.stock.brand.name }}
+										{{ order.stock.first_description.description }}
+										{{ order.stock.product.name }}
+		
+		<div class="divider"></div>
+
+
+ {% endfor %}
+
       </div>
+
+     
     </div>
+
 
      <div class="ui floating search dropdown button">
       <i class="alarm icon"></i>
@@ -185,11 +192,31 @@
       <div class="ui floating dropdown icon button">
         <i class="dropdown icon"></i>
         <div class="menu">
-          <a class="item">Edit Profile</a>
-          <a class="item">WishList</a>
-          <a class="item">How it works</a>
-          <a class="item">Suggestions</a>
-          <a class="item"  href="{{ url_for('logout') }}">Logout</a>
+
+          <a class="item">
+          <i class="edit icon"></i>
+          Edit Profile</a>
+
+          <div class="divider"></div>
+
+          <a class="item">
+          <i class="heart icon"></i>
+          WishList</a>
+
+          <a class="item">
+          <i class="info circle icon"></i>
+          How it works</a>
+
+          <a class="item">
+          <i class="idea icon"></i>
+          Suggestions</a>
+
+          <a class="item"  
+          href="{{ url_for('logout') }}">
+          <i class="sign out icon"></i>
+          Log Out
+          </a>
+
         </div>
       </div>
     </div>

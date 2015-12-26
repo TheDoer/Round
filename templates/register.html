@@ -93,50 +93,7 @@
     padding: 5em 0em;
   }
   </style>
-<!--
-  <script>
-    $(document)
-      .ready(function() {
-        $('.ui.form')
-          .form({
-            fields: {
-              email: {
-                identifier  : 'email',
-                rules: [
-                  {
-                    type   : 'empty',
-                    prompt : 'Please enter your e-mail'
-                  },
-                  {
-                    type   : 'email',
-                    prompt : 'Please enter a valid e-mail'
-                  },
-                  {
-                    type   : 'shopname',
-                    prompt : 'Please enter your shop name'
-                  }
-                ]
-              },
-              password: {
-                identifier  : 'password',
-                rules: [
-                  {
-                    type   : 'empty',
-                    prompt : 'Please enter your password'
-                  },
-                  {
-                    type   : 'length[6]',
-                    prompt : 'Your password must be at least 6 characters'
-                  }
-                ]
-              }
-            }
-          })
-        ;
-      })
-    ;
-  </script>
--->
+
 </head>
 <body>
 <div class="ui middle aligned center aligned grid">
@@ -146,17 +103,13 @@
   </div>
   <div class="row">
     <div class="column">
-      <h2 class="ui teal image header">
-      
-        <img src="/static/assets/images/logo.png"  class="image">
-      
+      <h4 class="ui orange image header">
+      <img src="/static/assets/images/logo.png" class="ui mini circular image">
+      <div class="ui orange header">
+        Create your RoundShopper.com Account
+      </div>
+    </h4>
 
-        <div class="ui orange header">
-
-          Register and Enjoy Group buying discounts.
-        </div>
-
-      </h2>
 
       <form method="POST" action="" class="ui large form segment">
         {% from 'macros.html' import render_field %}
@@ -166,11 +119,11 @@
           {{ render_field(field) }}
         {% endfor %}
         
-        <button class="ui fluid large teal submit button" type="submit" id="submit">Register.</button>
+        <button class="ui fluid large teal submit button" type="submit" id="submit">Create your RoundShopper.com account</button>
       </form>
 
       <div class="ui message">
-        Already have an Account? <a href="{{ url_for('login') }}">Login here.</a>
+        Already have an Account? <a href="{{ url_for('login') }}">Login here</a>
       </div>
     </div>
   </div>

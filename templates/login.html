@@ -2,26 +2,7 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-  <!-- <link rel="stylesheet" type="text/css" href="/static/components/reset.css">
-  <link rel="stylesheet" type="text/css" href="/static/components/site.css">
-  <link rel="stylesheet" type="text/css" href="/static/components/container.css">
-  <link rel="stylesheet" type="text/css" href="/static/components/grid.css">
-  <link rel="stylesheet" type="text/css" href="/static/components/header.css">
-  <link rel="stylesheet" type="text/css" href="/static/components/image.css">
-  <link rel="stylesheet" type="text/css" href="/static/components/menu.css">
-
-  <link rel="stylesheet" type="text/css" href="/static/components/divider.css">
-  <link rel="stylesheet" type="text/css" href="/static/components/segment.css">
-  <link rel="stylesheet" type="text/css" href="/static/components/form.css">
-  <link rel="stylesheet" type="text/css" href="/static/components/input.css">
-  <link rel="stylesheet" type="text/css" href="/static/components/button.css">
-  <link rel="stylesheet" type="text/css" href="/static/components/label.css">
-  <link rel="stylesheet" type="text/css" href="/static/components/list.css">
-  <link rel="stylesheet" type="text/css" href="/static/components/message.css">  
-  <link rel="stylesheet" type="text/css" href="/static/uiux/semantic-ui/UI-Icon-master/icon.min.css">
-  <script src="/static/assets/library/jquery.min.js"></script>
-  <script src="/static/components/form.js"></script>
-  <script src="/static/components/transition.js"></script>-->
+ 
 
   <style type="text/css">
     body {
@@ -93,51 +74,17 @@
   }
   </style>
 
-<!--   /*<script>
-  $(document)
-    .ready(function() {
-      $('.ui.form')
-        .form({
-          fields: {
-            email: {
-              identifier  : 'email',
-              rules: [
-                {
-                  type   : 'empty',
-                  prompt : 'Please enter your e-mail'
-                },
-                {
-                  type   : 'email',
-                  prompt : 'Please enter a valid e-mail'
-                }
-              ]
-            },
-            password: {
-              identifier: 'password',
-              rules: [
-                {
-                  type: 'empty',
-                  prompt: 'Please enter a password'
-                }
-              ]
-            }
-          },
-          inline: true
-        })
-      ;
-    })
-  ;
-  </script>*/ -->
+
 </head>
 <body>
 <div class="ui middle aligned center aligned grid">
   <div class="column">
-    <h2 class="ui orange image header">
-      <img src="/static/assets/images/logo.png" class="ui circular image">
+    <h4 class="ui orange image header">
+      <img src="/static/assets/images/logo.png" href="{{ url_for('index') }}"    class="ui mini circular image">
       <div class="ui orange header">
-        Welcome back, Login to your RoundShopper Account
+        Sign in to your RoundShopper.com Account
       </div>
-    </h2>
+    </h4>
     
     <form method="POST" action="" class="ui large form segment">
       {% from 'macros.html' import render_field %}
@@ -147,7 +94,7 @@
         {{ render_field(field) }}
       {% endfor %}
       
-      <button class="ui fluid large teal submit button" type="submit" id="submit">Login!</button>
+      <button class="ui fluid large teal submit button" type="submit" id="submit">Login</button>
     </form>
 
     <div class="ui message">

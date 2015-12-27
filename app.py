@@ -10,7 +10,7 @@ from models import *
 import forms
 
 
-#DEBUG = True
+DEBUG = True
 #PORT = 3000
 #HOST = 'localhost'
 UPLOAD_FOLDER = 'static/img/'
@@ -427,5 +427,5 @@ def internal_server_errror(e):
 	
 
 if __name__ == '__main__':
-	app.run()
+	app.run(debug=DEBUG)
 	#app.run(debug=DEBUG, host=HOST, port=PORT)

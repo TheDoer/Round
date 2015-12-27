@@ -1,11 +1,12 @@
  <!DOCTYPE HTML>
 <html>
 <head>
-	<link rel="icon" type="/static/img/logo.png" href="">
-    <title>RoundShopper.com</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/semantic.min.css">
-    <link rel="stylesheet" type="text/css" href="/static/css/icon.css">
- 
+{% block head %}
+    <title>{% block title %}{% endblock %}RoundShopper.com | Group Buying Groceries</title>
+{% endblock %}
+ <link rel="icon" type="/static/img/logo.png" href="">
+ <link rel="stylesheet" type="text/css" href="/static/css/semantic.min.css">
+ <link rel="stylesheet" type="text/css" href="/static/css/icon.css">
   </head>
 
 <body>
@@ -19,12 +20,140 @@
   	{% block body %}
   	{% endblock %}
 
-  <script type="text/javascript" src="/static/uiux/jquery/dist/jquery.min.js"></script>
-  <script type="text/javascript" src="/static/uiux/semantic-ui/semantic.min.js"></script>
-  <script type="text/javascript" src="/static/js/app.js"></script>
+  
 
   {% block ajax %}
   {% endblock %}
 
+
+
+  <div class="ui inverted vertical footer segment">
+    <div class="ui center aligned container">
+      <div class="ui stackable inverted divided grid">
+        <div class="three wide column">
+          <h4 class="ui inverted header">Get to know us</h4>
+          <div class="ui inverted link list">
+            <a href="#" class="item">About RoundShopper.com</a>
+            <a href="#" class="item">Careers</a>
+            <a href="#" class="item">Payment</a>
+            <a href="#" class="item">Refunds</a>
+          </div>
+        </div>
+        <div class="three wide column">
+          <h4 class="ui inverted header">Help Center & Support</h4>
+          <div class="ui inverted link list">
+            <a href="#" class="item">Your Account</a>
+            <a href="#" class="item">Your Orders</a>
+            <a href="#" class="item">Delivery Information</a>
+            <a href="#" class="item">Suggestions and Feedback</a>
+          </div>
+        </div>
+        <div class="three wide column">
+          <h4 class="ui inverted header">Supported Places</h4>
+          <div class="ui inverted link list">
+            <a href="#" class="item">Town Center-Chitungwiza</a>
+            <a href="#" class="item">Tichagarika(Cooming Soon)</a>
+            <a href="#" class="item">Mufakose(Cooming Soon)</a>
+            <a href="#" class="item">Budiriro(Cooming Soon)</a>
+          </div>
+        </div>
+        <div class="three wide column">
+          <h4 class="ui inverted header">Supported Places</h4>
+          <div class="ui inverted link list">
+            <a href="#" class="item">Town Center-Chitungwiza</a>
+            <a href="#" class="item">Tichagarika(Cooming Soon)</a>
+            <a href="#" class="item">Mufakose(Cooming Soon)</a>
+            <a href="#" class="item">Budiriro(Cooming Soon)</a>
+          </div>
+        </div>
+        <div class="three wide column">
+          <h4 class="ui inverted header">Supported Places</h4>
+          <div class="ui inverted link list">
+            <a href="#" class="item">Town Center-Chitungwiza</a>
+            <a href="#" class="item">Tichagarika(Cooming Soon)</a>
+            <a href="#" class="item">Mufakose(Cooming Soon)</a>
+            <a href="#" class="item">Budiriro(Cooming Soon)</a>
+          </div>
+        </div>
+      </div>
+      <div class="ui inverted section divider"></div>
+      <img src="/static/assets/images/logo.png" class="ui centered mini circular image">
+      <div class="ui horizontal inverted small divided link list">
+        <a class="item" href="#">Our Company</a>
+        <a class="item" href="#">Contact Us</a>
+        <a class="item" href="#">Terms and Conditions</a>
+        <a class="item" href="#">Privacy Policy</a>
+
+      </div>
+    </div>
+  </div>
+
+
+    
+
+   
+
+
+    <style>
+    #owl-demo .item img{
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+    </style>
+
+
+    <script>
+    $(document).ready(function() {
+      $("#owl-demo").owlCarousel({
+
+      navigation : true,
+      slideSpeed : 300,
+      paginationSpeed : 400,
+      singleItem : true
+
+      // "singleItem:true" is a shortcut for:
+      // items : 1, 
+      // itemsDesktop : false,
+      // itemsDesktopSmall : false,
+      // itemsTablet: false,
+      // itemsMobile : false
+
+      });
+    });
+    </script>
+    <!-- Main Roundshopper Slider Javascript  Properties-->
+    <script src="/static/uiux/powerowl/assets/js/jquery-1.9.1.min.js"></script> 
+    <script src="/static/uiux/powerowl/owl-carousel/owl.carousel.js"></script>
+    <!-- Main Roundshopper Slider Javascript  Properties-->
+
+    <!-- Main Roundshopper Slider Javascript  Properties-->
+    <script src="/static/uiux/powerowl/assets/js/bootstrap-collapse.js"></script>
+    <script src="/static/uiux/powerowl/assets/js/bootstrap-transition.js"></script>
+    <script src="/static/uiux/powerowl/assets/js/bootstrap-tab.js"></script>
+
+    <script src="/static/uiux/powerowl/assets/js/google-code-prettify/prettify.js"></script>
+    <script src="/static/uiux/powerowl/assets/js/application.js"></script>
+    <!-- Main Roundshopper Slider Javascript  Properties-->
+
+    <!-- Main Roundshopper Slider Javascript  Properties-->
+    <script src="/static/uiux/powerowl/assets/js/jquery-1.9.1.min.js"></script> 
+    <script src="/static/uiux/powerowl/owl-carousel/owl.carousel.js"></script>
+    <!-- Main Roundshopper Slider Javascript  Properties-->
+    <!-- Main Roundshopper Slider Javascript  Properties-->
+    <script src="/static/uiux/powerowl/assets/js/bootstrap-collapse.js"></script>
+    <script src="/static/uiux/powerowl/assets/js/bootstrap-transition.js"></script>
+    <script src="/static/uiux/powerowl/assets/js/bootstrap-tab.js"></script>
+
+    <script src="/static/uiux/powerowl/assets/js/google-code-prettify/prettify.js"></script>
+    <script src="/static/uiux/powerowl/assets/js/application.js"></script>
+    <!-- Main Roundshopper Slider Javascript  Properties-->
+
+    <script type="text/javascript" src="/static/uiux/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="/static/uiux/semantic-ui/semantic.min.js"></script>
+  <script type="text/javascript" src="/static/js/app.js"></script>
+
   </body>
+</html>
+
 

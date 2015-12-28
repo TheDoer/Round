@@ -79,12 +79,12 @@
 <body>
 <div class="ui middle aligned center aligned grid">
   <div class="column">
-    <h4 class="ui orange image header">
-      <img src="/static/assets/images/logo.png" href="{{ url_for('index') }}"    class="ui mini circular image">
-      <div class="ui orange header">
+    <a href="{{ url_for('index') }}" class="ui orange image header">
+      <img src="/static/assets/images/logo.png"     class="ui mini circular image">
+      <div class="ui blue header">
         Sign in to your RoundShopper.com Account
       </div>
-    </h4>
+    </a>
     
     <form method="POST" action="" class="ui large form segment">
       {% from 'macros.html' import render_field %}

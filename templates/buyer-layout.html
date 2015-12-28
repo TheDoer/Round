@@ -129,7 +129,7 @@
 
       <div class="ui floating search dropdown button">
       <i class="in cart icon"></i>
-      <span class="text">New Orders &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
+      <span class="text">Your Orders &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
       <div class="floating circular ui red label">
       {{ current_user.orders.where(Order.ready==False).count() }}
 	  </div>

@@ -13,7 +13,7 @@
         <div class="ui segment">
           <h1 class="ui dividing header">
           	<i class="ui orange cart icon"></i>
-          	Add a new stock item
+          	Add new product
           </h1>
           <p>&nbsp</p>
           {% with messages = get_flashed_messages(True) %}
@@ -41,6 +41,17 @@
                   </datalist>
               </div>
 
+
+              <div class="ui large required input field">
+                <label>Product</label>
+                <input type="text" name="product" list="products" placeholder="e.g Rice" required>
+                <datalist id="products">
+                    {% for product in products %}
+                      <option value="{{ product.name }}">
+                    {% endfor %}
+                  </datalist>
+                </div>
+
               <div class="ui large required input field">
                   <label>Description</label>
                   <input type="text" name="description" list="descriptions" placeholder="e.g Brown" required>
@@ -51,15 +62,6 @@
                   </datalist>
               </div>
 
-              <div class="ui large required input field">
-                <label>Product</label>
-                <input type="text" name="product" list="products" placeholder="e.g Rice" required>
-                <datalist id="products">
-                  	{% for product in products %}
-                  		<option value="{{ product.name }}">
-                  	{% endfor %}
-                  </datalist>
-                </div>
             </div>
 
             <p>&nbsp</p>

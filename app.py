@@ -2,17 +2,15 @@ import json
 import os
 from werkzeug import secure_filename
 
-from flask import Flask, render_template, session, redirect, url_for, request, flash
+from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 
 from models import *
 
-import forms
 
-
-#DEBUG = True
-#PORT = 3000
-#HOST = 'localhost'
+DEBUG = True
+PORT = 3000
+HOST = 'localhost'
 UPLOAD_FOLDER = 'static/img/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
@@ -39,18 +37,20 @@ def allowed_file(filename):
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
-	register_form = forms.RegisterForm()
+	try:
+		email = dict(request.form.items())['email']
+		password = dict(request.form.items())['password']
+		address = dict(request.form.items())['address']
+		account_type = dict(request.form.items())['account_type']
+		#code = dict(request.form.items())['code']
+		phone = dict(request.form.items())['phone']
 
-	if register_form.validate_on_submit():
-		User.create_user(
-			username='unknown', 
-			email=register_form.email.data,
-			password=register_form.password.data,
-			address=register_form.address.data,
-			account_type='buyer',
-			phone=register_form.phone.data)
-		
-		user = User.get(User.email==register_form.email.data)
+		#phone = int(str(code) + str(phone))
+
+		User.create_user(username='unknown', email=email, password=password, address=address,
+			account_type=account_type, phone=phone)
+
+		user = User.get(User.email==email)
 
 		login_user(user)
 
@@ -60,8 +60,10 @@ def register():
 			return redirect(url_for('supplier'))
 		else:
 			return redirect(url_for('shipping'))
-	
-	return render_template('register.html', form=register_form)
+
+	except KeyError:
+		flash('Please fill all fields')
+		return render_template('register.html')
 
 @app.route('/supplier-register', methods=['POST', 'GET'])
 def supplier_register():
@@ -101,27 +103,39 @@ def index():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-	login_form = forms.LoginForm()
+	flash('Enter login details', 'info')
+	return render_template('login.html')
 
-	if login_form.validate_on_submit():
-		try:
-			user = User.get(User.email == login_form.email.data)
+@app.route('/login-aunth', methods=['POST', 'GET'])
+def login_aunth():
+	try:
+		email = dict(request.form.items())['email']
+		password = dict(request.form.items())['password']
 
-			if user.password == login_form.password.data:
-				login_user(user)
+		user = User.get(User.email==email)
 
-				if user.account_type == 'buyer':
-					return redirect(url_for('buyer'))
-				elif user.account_type == 'supplier':
-					return redirect(url_for('supplier'))
-				else:
-					redirect(url_for('shipping'))
+		if password != user.password:
+			flash('Invalid login', 'error')
+			return redirect(url_for('login'))
+		else:
+			login_user(user)
+
+			if user.account_type == 'buyer':
+				return redirect(url_for('buyer'))
+			elif user.account_type == 'supplier':
+				return redirect(url_for('supplier'))
 			else:
-				pass
-		except DoesNotExist:
-			pass
+				redirect(url_for('shipping'))
 
-	return render_template('login.html', form=login_form)
+	except KeyError: #some required fields blanks
+		flash('Enter all details', 'info')
+		return redirect(url_for('login'))
+	except DoesNotExist: #user not found in database
+		flash("Invalid login", 'error')
+		return redirect(url_for('login'))
+
+	flash('Enter login details', 'info')
+	return render_template('login.html')
 
 @app.route('/logout', methods=['POST', 'GET'])
 def logout():
@@ -138,52 +152,15 @@ def buyer():
 		Order=Order, Stock=Stock, fn=fn, my_orders=my_orders, list=list)
 
 
-@app.route('/buyer/feed', methods=['POST', 'GET'])
-@app.route('/buyer/feed/<product>/<page>')
-@app.route('/buyer/feed/<page>')
+@app.route('/buyer/feed')
+@app.route('/buyer/feed/<product>')
 @login_required
-def buyer_feed(product=None, page=None):
-	feeds_per_page = 5
-
-	if page == None:
-		page = 1
-
+def buyer_feed(product=None):
 	if product == None:
-		stocks = Stock.select().where(Stock.bought==False).paginate(int(page), feeds_per_page)
+		stocks = Stock.select().where(Stock.bought==False)
 	else:
-		stocks = Product.get(Product.name==product).in_stock.where(Stock.bought==False).paginate(int(page), feeds_per_page)
-
-	stocks = [{'id': json.dumps(str(stock.id)) , 'stock': stock, 'form': forms.OrderForm() } for stock in stocks] # this will be used for adding listings to the homepage
-
-	stock_ids = [stock['id'] for stock in stocks ]
-
-	for stock in stocks:	
-		if stock['form'].validate_on_submit():
-			quantity = order_form.quantity.data
-			stock_id = dict(request.form.items())['stock_id']
-			stock = Stock.get(Stock.id==stock_id)
-
-			orders = Order.select(fn.sum(Order.quantity)).where(Order.stock==stock.id).scalar() #Get the current number of orders
-
-			if orders == None: #I don't want a TypeError below
-				orders = 0
-
-			needed = stock.minimum_quantity - orders
-
-			if quantity <= needed: #verify if quantity is less than or equal to the needed orders
-				price = quantity * stock.price #calculate the amount the buyer has to pay
-				Order.make_order(buyer=current_user.id, stock=stock, quantity=quantity, price=price)
-
-				if stock.minimum_quantity == Order.select(fn.sum(Order.quantity)).where(Order.stock==stock.id).scalar(): #check if the target has been met
-					stock.bought = True #update stock and set it to saved
-					stock.save()
-					orders = Stock.get(Stock.id==stock_id).orders
-
-					for order in orders:
-						order.ready = True
-						order.save()
-			else:
-				flash('Your order exceeds the needed quantity of {}'.format(needed), 'error')
+		stocks = Product.get(Product.name==product).in_stock.where(Stock.bought==False)
+	stocks = [{'id': json.dumps(str(stock.id)) , 'stock': stock } for stock in stocks] # this will be used for adding listings to the homepage
 
 	tags = [product.name for product in Product.select()]
 	tags += [descriptor.description for descriptor in Descriptor.select()]
@@ -191,7 +168,7 @@ def buyer_feed(product=None, page=None):
 	tags.sort()
 
 	return render_template('buyer-feed.html', stocks=stocks, current_user=current_user,
-		Order=Order, Stock=Stock, tags=tags, fn=fn, int=int)
+		Order=Order, Stock=Stock, tags=tags, fn=fn)
 
 @app.route('/buyer/how-it-works', methods=['POST', 'GET'])
 @login_required
@@ -279,7 +256,7 @@ def seller_add_product():
 		image =  request.files['image']
 		if image and allowed_file(image.filename):
 			filename = secure_filename(image.filename)
-			image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 
 		product, created = Product.create_or_get(name=product)
 		brand, created = Brand.create_or_get(name=brand, image=image.filename)
@@ -346,12 +323,12 @@ def shipping():
 def submit_product():
 	return render_template('supplier_submit_product.html', current_user=current_user)
 
-@app.route('/order', methods=['POST'])
+@app.route('/order/<stock_id>/<quantity>')
 @login_required
-def order():
-	try:
-		quantity = int(dict(request.form.items())['quantity'])
-		stock_id = dict(request.form.items())['stock_id']
+def order(stock_id=None, quantity=''):
+	quantity = int(quantity)
+
+	if quantity != '' and quantity > 0: #validate the quantity given
 		stock = Stock.get(Stock.id==stock_id)
 
 		orders = Order.select(fn.sum(Order.quantity)).where(Order.stock==stock.id).scalar() #Get the current number of orders
@@ -361,7 +338,7 @@ def order():
 
 		needed = stock.minimum_quantity - orders
 
-		if (quantity <= needed and quantity >= stock.minimum_quantity/10) or quantity == needed: #verify if quantity is less than or equal to the needed orders
+		if quantity <= needed: #verify if quantity is less than or equal to the needed orders
 			price = quantity * stock.price #calculate the amount the buyer has to pay
 			Order.make_order(buyer=current_user.id, stock=stock, quantity=quantity, price=price)
 
@@ -398,34 +375,27 @@ def order():
 				'''
 		else:
 			flash('Your order exceeds the needed quantity of {}'.format(needed), 'error')
-
-	except KeyError:
-		pass
+	else:
+		flash('Invalid quantity', 'error')
 
 	return redirect(url_for('buyer_feed'))
 
 @app.route('/labs', methods=['POST', 'GET'])
 def labs():
-	import requests
-	import json
+	try:
+		long_name = dict(request.form.items())['long-name']
+		short_name = dict(request.form.items())['short-name']
 
-	send_url = 'http://freegeoip.net/json'
-	r = requests.get(send_url)
-	j = json.loads(r.text)
-	lat = j['latitude']
-	lon = j['longitude']
+		unit, created = Unit.create_or_get(short_name=short_name, long_name=long_name)
 
-	return render_template('mapbox.html')
+		if created:
+			flash('Unit added successfully', 'success')
+		else:
+			flash('Unit already exists', 'error')
 
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html'), 404
-
-@app.errorhandler(500)
-def internal_server_errror(e):
-    return render_template('500.html'), 500
-	
-
+		return redirect(url_for('labs'))
+	except KeyError:
+		flash('Fill in all fields', 'info')
+		return render_template('add-unit.html')
 if __name__ == '__main__':
-	app.run()
-	#app.run(debug=DEBUG, host=HOST, port=PORT)
+	app.run(debug=DEBUG, host=HOST, port=PORT)

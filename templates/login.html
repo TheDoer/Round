@@ -1,8 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Standard Meta -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-{% extends 'layout.html' %}
+  <!-- Site Properities -->
+  <title>Login Roundshopper</title>
+  
+  <link rel="stylesheet" type="text/css" href="/static/components/reset.css">
+  <link rel="stylesheet" type="text/css" href="/static/components/site.css">
+  <link rel="stylesheet" type="text/css" href="/static/components/container.css">
+  <link rel="stylesheet" type="text/css" href="/static/components/grid.css">
+  <link rel="stylesheet" type="text/css" href="/static/components/header.css">
+  <link rel="stylesheet" type="text/css" href="/static/components/image.css">
+  <link rel="stylesheet" type="text/css" href="/static/components/menu.css">
 
-{% block body %}
- 
+  <link rel="stylesheet" type="text/css" href="/static/components/divider.css">
+  <link rel="stylesheet" type="text/css" href="/static/components/segment.css">
+  <link rel="stylesheet" type="text/css" href="/static/components/form.css">
+  <link rel="stylesheet" type="text/css" href="/static/components/input.css">
+  <link rel="stylesheet" type="text/css" href="/static/components/button.css">
+  <link rel="stylesheet" type="text/css" href="/static/components/list.css">
+  <link rel="stylesheet" type="text/css" href="/static/components/message.css">  
+  <link rel="stylesheet" type="text/css" href="/static/uiux/semantic-ui/UI-Icon-master/icon.min.css">
+  <script src="/static/assets/library/jquery.min.js"></script>
+  <script src="/static/components/form.js"></script>
+  <script src="/static/components/transition.js"></script>
 
   <style type="text/css">
     body {
@@ -74,27 +99,82 @@
   }
   </style>
 
-
+  <script>
+  $(document)
+    .ready(function() {
+      $('.ui.form')
+        .form({
+          fields: {
+            email: {
+              identifier  : 'email',
+              rules: [
+                {
+                  type   : 'empty',
+                  prompt : 'Please enter your e-mail'
+                },
+                {
+                  type   : 'email',
+                  prompt : 'Please enter a valid e-mail'
+                }
+              ]
+            },
+            password: {
+              identifier  : 'password',
+              rules: [
+                {
+                  type   : 'empty',
+                  prompt : 'Please enter your password'
+                },
+                {
+                  type   : 'length[2]',
+                  prompt : 'Your password must be at least 6 characters'
+                }
+              ]
+            }
+          }
+        })
+      ;
+    })
+  ;
+  </script>
 </head>
 <body>
 <div class="ui middle aligned center aligned grid">
   <div class="column">
-    <a href="{{ url_for('index') }}" class="ui orange image header">
-      <img src="/static/assets/images/logo.png"     class="ui mini circular image">
-      <div class="ui blue header">
-        Sign in to your RoundShopper.com Account
+    <h2 class="ui teal image header">
+      <img src="/static/assets/images/logo.png" class="ui circular image">
+      <div class="ui orange header">
+        Welcome back, Login to your RoundShopper Account
       </div>
-    </a>
-    
-    <form method="POST" action="" class="ui large form segment">
-      {% from 'macros.html' import render_field %}
+    </h2>
+    <form class="ui large form" method="POST" action="{{ url_for('login_aunth') }}">
+      <div class="ui stacked segment">
+	 {% with messages = get_flashed_messages(True) %}
+				  	{% for category, message in messages %}
+				  		<div class="ui fluid {{ category }} message">
+				  			<i class="ui close icon"></i>
+				  			<div class="ui header">{{ category }}</div>
+				  			{{ message }}
+				  		</div>
+				  	{% endfor %}
+				  {% endwith %}
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="ui user icon"></i>
+            <input type="text" name="email" placeholder="E-mail address">
+          </div>
+        </div>
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="lock icon"></i>
+            <input type="password" name="password" placeholder="Password">
+          </div>
+        </div>
+        <button class="ui fluid large teal submit button">Login into RoundShopper</button>
+      </div>
 
-      {{ form.hidden_tag() }}
-      {% for field in form %}
-        {{ render_field(field) }}
-      {% endfor %}
-      
-      <button class="ui fluid large primary submit button" type="submit" id="submit">Login</button>
+      <div class="ui error message"></div>
+
     </form>
 
     <div class="ui message">
@@ -103,5 +183,6 @@
   </div>
 </div>
 
-{% endblock %}
+</body>
 
+</html>

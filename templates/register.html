@@ -1,8 +1,13 @@
-{% extends 'layout.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Standard Meta -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-{% block body %}
   <!-- Site Properities -->
-  <!-- <title>Register RoundShopper</title>
+  <title>Register RoundShopper</title>
   <link rel="stylesheet" type="text/css" href="/static/components/reset.css">
   <link rel="stylesheet" type="text/css" href="/static/components/site.css">
   <link rel="stylesheet" type="text/css" href="/static/components/container.css">
@@ -16,34 +21,38 @@
   <link rel="stylesheet" type="text/css" href="/static/components/form.css">
   <link rel="stylesheet" type="text/css" href="/static/components/input.css">
   <link rel="stylesheet" type="text/css" href="/static/components/button.css">
-  <link rel="stylesheet" type="text/css" href="/static/components/label.css">
   <link rel="stylesheet" type="text/css" href="/static/components/list.css">
   <link rel="stylesheet" type="text/css" href="/static/components/message.css">  
   <link rel="stylesheet" type="text/css" href="/static/uiux/semantic-ui/UI-Icon-master/icon.min.css">
- -->
- <!--  <script src="/static/assets/library/jquery.min.js"></script>
+
+  <script src="/static/assets/library/jquery.min.js"></script>
   <script src="/static/components/form.js"></script>
   <script src="/static/components/transition.js"></script>
 
   <script src="/static/assets/library/jquery.min.js"></script>
   <script src="/static/components/form.js"></script>
-  <script src="/static/components/transition.js"></script> -->
+  <script src="/static/components/transition.js"></script>
 
-
+  <style type="text/css">
+    body {
+      background-color: #DADADA;
+    }
+    body > .grid {
+      height: 100%;
+    }
+    .image {
+      margin-top: -100px;
+    }
+    .column {
+      max-width: 450px;
+    }
+  </style>
+   
    <style type="text/css">
 
   body {
     background-color: #FFFFFF;
   }
-
-  .image {
-    margin-top: -100px;
-  }
-  
-  .column {
-    max-width: 450px;
-  }
-
   .main.container {
     margin-top: 2em;
   }
@@ -93,41 +102,117 @@
     padding: 5em 0em;
   }
   </style>
-
+<!--
+  <script>
+    $(document)
+      .ready(function() {
+        $('.ui.form')
+          .form({
+            fields: {
+              email: {
+                identifier  : 'email',
+                rules: [
+                  {
+                    type   : 'empty',
+                    prompt : 'Please enter your e-mail'
+                  },
+                  {
+                    type   : 'email',
+                    prompt : 'Please enter a valid e-mail'
+                  },
+                  {
+                    type   : 'shopname',
+                    prompt : 'Please enter your shop name'
+                  }
+                ]
+              },
+              password: {
+                identifier  : 'password',
+                rules: [
+                  {
+                    type   : 'empty',
+                    prompt : 'Please enter your password'
+                  },
+                  {
+                    type   : 'length[6]',
+                    prompt : 'Your password must be at least 6 characters'
+                  }
+                ]
+              }
+            }
+          })
+        ;
+      })
+    ;
+  </script>
+-->
 </head>
 <body>
+
+
+
+
 <div class="ui middle aligned center aligned grid">
-  <div class="row">
-    <p>&nbsp</p>
-    <p>&nbsp</p>
-  </div>
-  <div class="row">
-    <div class="column">
-      <a href="{{ url_for('index') }}" class="ui orange image header">
-      <img src="/static/assets/images/logo.png" class="ui mini circular image">
-      <div class="ui blue header">
-        Create your RoundShopper.com Account
+  <div class="column">
+    <h2 class="ui teal image header">
+      <img src="/static/assets/images/logo.png" class="image">
+      <div class="ui orange header">
+        Register and Enjoy Round and Group buying.
       </div>
-    </a>
+    </h2>
+    <form class="ui large form" action="{{ url_for('register') }}" method="POST">
+      <div class="ui stacked segment">
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="mail icon"></i>
+            <input type="text" name="email" placeholder="email Address">
+          </div>
+        </div>
 
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="lock icon"></i>
+            <input type="password" name="password" placeholder="Password">
+          </div>
+        </div>
 
-      <form method="POST" action="" class="ui large form segment">
-        {% from 'macros.html' import render_field %}
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="phone icon"></i>
+            <input type="text" name="phone" placeholder="Contact Number">
+          </div>
+        </div>
 
-        {{ form.hidden_tag() }}
-        {% for field in form %}
-          {{ render_field(field) }}
-        {% endfor %}
-        
-        <button class="ui fluid large primary submit button" type="submit" id="submit">Create your RoundShopper.com account</button>
-      </form>
+        <div class="field">
+          <div class="ui left icon input">
+            <textarea name="address" placeholder="Address" required></textarea>
+          </div>
+        </div>
 
-      <div class="ui message">
-        Already have an Account? <a href="{{ url_for('login') }}">Login here</a>
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="user icon"></i>
+            <select class="" name="account_type" required>
+              <option value=""></option>
+              <option value="buyer">Buyer</option>
+              <option value="supplier">Supplier</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="ui fluid large teal submit button">Register to RoundShopper</button>
       </div>
+
+      <div class="ui error message"></div>
+
+    </form>
+
+    <div class="ui message">
+      Already have an Account? <a href="{{ url_for('login') }}">Login</a>
     </div>
   </div>
 </div>
-{% endblock %}
 
+</body>
 
+</html>

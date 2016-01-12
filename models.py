@@ -11,8 +11,8 @@ class BaseModel(Model):
 		database = DB
 
 class User(BaseModel, UserMixin):
-	username = CharField(unique=True)
-	phone = IntegerField(unique=True)
+	username = CharField()
+	phone = IntegerField()
 	email = CharField(unique=True, max_length=140)
 	password = CharField(max_length=50)
 	profile = TextField() 

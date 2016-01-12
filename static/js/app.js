@@ -1,20 +1,8 @@
 $('.ui.dropdown')
  .dropdown()
 ;
-$(document)
-    .ready(function() {
-      $('.ui.menu .ui.dropdown').dropdown({
-        on: 'hover'
-      });
-      $('.ui.menu a.item')
-        .on('click', function() {
-          $(this)
-            .addClass('active')
-            .siblings()
-            .removeClass('active')
-          ;
-        })
-      ;
-    })
-  ;
-  
+
+function order(stock_id){
+  var quantity = document.getElementById('order-'+ stock_id);
+  window.location = '/order/'+ stock_id + '/' + quantity.value;
+}

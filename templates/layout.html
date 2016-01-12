@@ -1,175 +1,41 @@
  <!DOCTYPE HTML>
 <html>
 <head>
-{% block head %}
-    <title>{% block title %}{% endblock %}RoundShopper.com | Group Buying Groceries</title>
-{% endblock %}
- <link rel="icon" type="/static/img/logo.png" href="">
- <link rel="stylesheet" type="text/css" href="/static/css/semantic.min.css">
- <link rel="stylesheet" type="text/css" href="/static/css/icon.css">
-
-
+	<link rel="icon" type="/static/img/logo.png" href="">
+    <title>Round & Round | IT GOES</title>
+    <link rel="stylesheet" type="text/css" href="/static/uiux/semantic-ui/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/uiux/semantic-ui/UI-Icon-master/icon.min.css">
   </head>
 
 <body>
- 	 
-    {% block menu %}
-    {% endblock %}
+ 	<div class="ui inverted attached menu stackable grid">
+ 		<a class="item" href={{ url_for('index') }}>
+			<img class="ui mini circular image" src="/static/assets/images/logo.png"> &nbsp
+	  	</a>
+	  	<a class="item" href={{ url_for('index') }}>
+			<b>RoundShopper</b>
+	  	</a>
+		<a class="item">Delivery Information</a>
+	    <a class="item">Contact: +263 774 150 929</a>
 
-    {% block cart %}
+	    <div class="right menu">
+			{% block logout %}
+		    {% endblock %}
+        </div>
+	</div>
+  	<div class="ui teal inverted attached menu stackable grid">
+      <div class="ui row">        
+          {% block notifications %}
+          {% endblock %} 
+      </div>
+    </div>
+    {% block menu %}
     {% endblock %}
 
   	{% block body %}
   	{% endblock %}
 
-  
-
-  {% block ajax %}
-  {% endblock %}
-
-
-
-  <!-- <div class="ui inverted vertical footer segment">
-    <div class="ui center aligned container">
-      <div class="ui stackable inverted divided grid">
-        <div class="three wide column">
-          <h4 class="ui inverted header">Get to know us</h4>
-          <div class="ui inverted link list">
-            <a href="#" class="item">About RoundShopper.com</a>
-            <a href="#" class="item">Careers</a>
-            <a href="#" class="item">Payment</a>
-            <a href="#" class="item">Refunds</a>
-          </div>
-        </div>
-        <div class="three wide column">
-          <h4 class="ui inverted header">Help Center & Support</h4>
-          <div class="ui inverted link list">
-            <a href="#" class="item">Your Account</a>
-            <a href="#" class="item">Your Orders</a>
-            <a href="#" class="item">Delivery Information</a>
-            <a href="#" class="item">Suggestions and Feedback</a>
-          </div>
-        </div>
-        <div class="three wide column">
-          <h4 class="ui inverted header">Supported Places</h4>
-          <div class="ui inverted link list">
-            <a href="#" class="item">Town Center-Chitungwiza</a>
-            <a href="#" class="item">Tichagarika(Cooming Soon)</a>
-            <a href="#" class="item">Mufakose(Cooming Soon)</a>
-            <a href="#" class="item">Budiriro(Cooming Soon)</a>
-          </div>
-        </div>
-        <div class="three wide column">
-          <h4 class="ui inverted header">Supported Places</h4>
-          <div class="ui inverted link list">
-            <a href="#" class="item">Town Center-Chitungwiza</a>
-            <a href="#" class="item">Tichagarika(Cooming Soon)</a>
-            <a href="#" class="item">Mufakose(Cooming Soon)</a>
-            <a href="#" class="item">Budiriro(Cooming Soon)</a>
-          </div>
-        </div>
-        <div class="three wide column">
-          <h4 class="ui inverted header">Supported Places</h4>
-          <div class="ui inverted link list">
-            <a href="#" class="item">Town Center-Chitungwiza</a>
-            <a href="#" class="item">Tichagarika(Cooming Soon)</a>
-            <a href="#" class="item">Mufakose(Cooming Soon)</a>
-            <a href="#" class="item">Budiriro(Cooming Soon)</a>
-          </div>
-        </div>
-      </div>
-      <div class="ui inverted section divider"></div>
-      <img src="/static/assets/images/logo.png" class="ui centered mini circular image">
-      <div class="ui horizontal inverted small divided link list">
-        <a class="item" href="#">Our Company</a>
-        <a class="item" href="#">Contact Us</a>
-        <a class="item" href="#">Terms and Conditions</a>
-        <a class="item" href="#">Privacy Policy</a>
-
-      </div>
-    </div>
-  </div> -->
-
-
-  <div class="ui inverted vertical footer segment">
-    <div class="ui container">
-      <div class="ui stackable inverted divided equal height stackable grid">
-        <div class="three wide column">
-          <h4 class="ui inverted header">Get to know us</h4>
-          <div class="ui inverted link list">
-            <a href="#" class="item">Company infor</a>
-            <a href="#" class="item">Investors</a>
-            <a href="#" class="item">Careers</a>
-            <a href="#" class="item">Blog</a>
-            <a href="#" class="item">Advertise with us</a>
-          </div>
-        </div>
-        <div class="three wide column">
-          <h4 class="ui inverted header">How RoundShopper works</h4>
-          <div class="ui inverted link list">
-            <a href="#" class="item">How to Shop on RoundShopper.com</a>
-            <a href="#" class="item">How to Sell on RoundShopper.com</a>
-            <a href="#" class="item">Become an Affiliate</a>
-            <a href="#" class="item">Shipping Rates and Polices</a>
-          </div>
-        </div>
-         <div class="three wide column">
-          <h4 class="ui inverted header"> Your Account</h4>
-          <div class="ui inverted link list">
-            <a href="#" class="item">Your Account</a>
-            <a href="#" class="item">Your Orders</a>
-            <a href="#" class="item">Returns and Replacements</a>
-          
-          </div>
-        </div>
-        <div class="seven wide column">
-          <h4 class="ui inverted header">Currently Supported Places</h4>
-          <div class="item">Chikwanha-Chitungwizwa</div>
-          <div class="item">Tichagarika-GlenView8(Comming Soon)</div>
-          <div class="item">Budiriro 5-(Comming Soon)</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-    
-
-   
-
-
-    <!-- Main Roundshopper Slider Javascript  Properties-->
-    <script src="/static/uiux/powerowl/assets/js/jquery-1.9.1.min.js"></script> 
-    <script src="/static/uiux/powerowl/owl-carousel/owl.carousel.js"></script>
-    <!-- Main Roundshopper Slider Javascript  Properties-->
-
-    <!-- Main Roundshopper Slider Javascript  Properties-->
-    <script src="/static/uiux/powerowl/assets/js/bootstrap-collapse.js"></script>
-    <script src="/static/uiux/powerowl/assets/js/bootstrap-transition.js"></script>
-    <script src="/static/uiux/powerowl/assets/js/bootstrap-tab.js"></script>
-
-    <script src="/static/uiux/powerowl/assets/js/google-code-prettify/prettify.js"></script>
-    <script src="/static/uiux/powerowl/assets/js/application.js"></script>
-    <!-- Main Roundshopper Slider Javascript  Properties-->
-
-    <!-- Main Roundshopper Slider Javascript  Properties-->
-    <script src="/static/uiux/powerowl/assets/js/jquery-1.9.1.min.js"></script> 
-    <script src="/static/uiux/powerowl/owl-carousel/owl.carousel.js"></script>
-    <!-- Main Roundshopper Slider Javascript  Properties-->
-    <!-- Main Roundshopper Slider Javascript  Properties-->
-    <script src="/static/uiux/powerowl/assets/js/bootstrap-collapse.js"></script>
-    <script src="/static/uiux/powerowl/assets/js/bootstrap-transition.js"></script>
-    <script src="/static/uiux/powerowl/assets/js/bootstrap-tab.js"></script>
-
-    <script src="/static/uiux/powerowl/assets/js/google-code-prettify/prettify.js"></script>
-    <script src="/static/uiux/powerowl/assets/js/application.js"></script>
-    <!-- Main Roundshopper Slider Javascript  Properties-->
-
-    <script type="text/javascript" src="/static/uiux/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="/static/uiux/jquery/dist/jquery.min.js"></script>
   <script type="text/javascript" src="/static/uiux/semantic-ui/semantic.min.js"></script>
   <script type="text/javascript" src="/static/js/app.js"></script>
-
   </body>
-</html>
-
-

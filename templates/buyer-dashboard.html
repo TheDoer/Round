@@ -12,7 +12,7 @@
                         <div class="item">
                           Orders
                             <div class="ui large message">                
-                                Total Orders
+                                Total
                                 <div class="right floated content">                                  
                         {% if current_user.orders.count() == None %}
                                     <div class="two wide column">
@@ -32,16 +32,12 @@
                         <div class="item">
                           Purchases
                           <div class="ui large message">                
-                                Total Purchases
+                                Total
                                 <div class="right floated content">
                                 {% for order in Order.select(fn.sum(Order.price).alias('total_purchases')).where((Order.buyer==current_user.id) ) %}
                                   {% if order.total_purchases == None %}
                                     <div class="two wide column">
-                                      <div class="ui large right aligned orange label ">
-                                      <i class="dollar icon"></i>
-                                      &nbsp
-                                      {{ 0 }}
-                                      </div>
+                                      <div class="ui large right aligned orange label ">${{ 0 }}</div>
                                     </div>
                                   {% else%}
                                     <div class="two wide column">
@@ -54,21 +50,7 @@
                         </div>
             </div>
         </div>
-<div class="column">
-    
-    <a class="green ui massive button" href="#">Confirm Orders for Shipping</a>
-    <div class="ui divider"></div>
-     </div>
-
       </div>
-
-
-
-
-
-
-
-
       <div class="twelve wide column" >
         <p>&nbsp</p>
         <p>&nbsp</p>  
@@ -174,17 +156,10 @@
                   {% endif %}
                  
                 </div>
-
-
                 {% endfor %}
           </div>
-
-        </div>
-
+        </div>        
       </div>
-      
     </div>
-
-
 
 {% endblock %}

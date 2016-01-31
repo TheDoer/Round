@@ -424,6 +424,10 @@ def page_not_found(e):
 @app.errorhandler(500)
 def internal_server_errror(e):
     return render_template('500.html'), 500
+
+@app.route('/about')
+def about():
+	return render_template('about-roundshopper.html')
 	
 
 if __name__ == '__main__':
